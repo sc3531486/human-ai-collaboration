@@ -1,0 +1,174 @@
+/*
+ * 由 scripts/build-css.mjs 从 navis-web 基线机械生成，请勿手工编辑。
+ * 全部选择器带 vb- 前缀并收在 .vb-root 作用域内 —— SDK 不拥有宿主页面。
+ */
+.vb-root .vb-phone { width: 100%; height: 100%; border: none; background: #f8fafc; display: flex; flex-direction: column; overflow: hidden; position: relative; }.vb-root .vb-header { background: #1e293b; color: white; text-align: center; padding: 12px; padding-top: calc(12px + env(safe-area-inset-top)); font-weight: 600; z-index: 20; font-size: 16px; display: flex; justify-content: space-between; align-items: center; }.vb-root .vb-stage-container { position: relative; width: 100%; height: 240px; background: #0b132b; overflow: hidden; flex-shrink: 0; box-shadow: 0 4px 15px rgba(0,0,0,0.25); }.vb-root .vb-avatar-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; overflow: hidden; background: #0f172a; z-index: 10; transition: opacity 0.3s; }.vb-root .vb-digital-human-wrapper { position: relative; width: 100%; height: 100%; overflow: hidden; display: flex; align-items: center; justify-content: center; }.vb-root .vb-digital-human-img { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; 
+            object-position: center 25%; 
+            transform-origin: center bottom;
+            animation: vb-humanBreath 4s ease-in-out infinite;
+            transition: filter 0.3s, transform 0.3s;
+        }@keyframes vb-humanBreath{
+            0%, 100% { transform: scale(1.0) translateY(0); }
+            50% { transform: scale(1.018) translateY(-2px); }
+        }.vb-root .vb-avatar-layer.vb-speaking .vb-digital-human-img {
+            animation: vb-humanSpeaking 0.6s ease-in-out infinite alternate;
+            filter: drop-shadow(0 0 12px rgba(56, 189, 248, 0.4));
+        }@keyframes vb-humanSpeaking{
+            0% { transform: scale(1.01) translateY(0); }
+            100% { transform: scale(1.025) translateY(-3px); }
+        }.vb-root .vb-digital-human-info {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: linear-gradient(to top, rgba(15, 23, 42, 0.95) 0%, rgba(15, 23, 42, 0.6) 65%, transparent 100%);
+            padding: 10px 14px 8px 14px;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            z-index: 12;
+            backdrop-filter: blur(2px);
+        }.vb-root .vb-dh-name-tag { display: flex; flex-direction: column; gap: 2px; }.vb-root .vb-dh-title { color: #f8fafc; font-size: 13px; font-weight: 600; text-shadow: 0 1px 3px rgba(0,0,0,0.8); }.vb-root .vb-dh-badge { font-size: 10px; color: #3b82f6; background: rgba(56,189,248,0.15); border: 1px solid rgba(56,189,248,0.3); padding: 1px 6px; border-radius: 4px; display: inline-block; width: fit-content; }.vb-root .vb-voice-wave-bar { display: flex; align-items: flex-end; gap: 3px; height: 16px; padding-bottom: 2px; }.vb-root .vb-wave-item { width: 3px; background: #3b82f6; border-radius: 2px; height: 4px; transition: height 0.15s ease; }.vb-root .vb-avatar-layer.vb-speaking .vb-wave-item:nth-child(1) { animation: vb-wave 0.8s infinite 0.1s; }.vb-root .vb-avatar-layer.vb-speaking .vb-wave-item:nth-child(2) { animation: vb-wave 0.6s infinite 0.2s; }.vb-root .vb-avatar-layer.vb-speaking .vb-wave-item:nth-child(3) { animation: vb-wave 0.9s infinite 0.0s; }.vb-root .vb-avatar-layer.vb-speaking .vb-wave-item:nth-child(4) { animation: vb-wave 0.5s infinite 0.3s; }.vb-root .vb-avatar-layer.vb-speaking .vb-wave-item:nth-child(5) { animation: vb-wave 0.7s infinite 0.15s; }@keyframes vb-wave{
+            0%, 100% { height: 4px; background: #3b82f6; }
+            50% { height: 16px; background: #2563eb; }
+        }.vb-root .vb-digital-human-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: top center;
+            transition: transform 0.4s ease, filter 0.4s ease;
+            animation: vb-dhBreath 5s ease-in-out infinite;
+        }@keyframes vb-dhBreath{
+            0%, 100% { transform: scale(1.0); }
+            50% { transform: scale(1.02); }
+        }.vb-root .vb-avatar-layer.vb-listening .vb-digital-human-img {
+            filter: drop-shadow(0 0 12px rgba(56, 189, 248, 0.7));
+            transform: scale(1.03);
+        }.vb-root .vb-avatar-layer.vb-thinking .vb-digital-human-img {
+            filter: brightness(1.06) drop-shadow(0 0 10px rgba(139, 92, 246, 0.6));
+        }.vb-root .vb-avatar-layer.vb-speaking .vb-digital-human-img {
+            transform: scale(1.025);
+            filter: drop-shadow(0 0 10px rgba(37, 99, 235, 0.5));
+        }.vb-root .vb-agent-video-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; display: none; z-index: 5; background: #000; }.vb-root .vb-local-video-pip { position: absolute; top: 10px; right: 10px; width: 75px; height: 100px; border: 2px solid #ffffff; border-radius: 6px; object-fit: cover; z-index: 15; background: #1e293b; display: none; box-shadow: 0 4px 8px rgba(0,0,0,0.5); }.vb-root .vb-stage-badge { position: absolute; top: 10px; left: 10px; background: rgba(15,23,42,0.85); color: #fff; padding: 4px 10px; border-radius: 14px; font-size: 12px; z-index: 15; backdrop-filter: blur(4px); display: flex; align-items: center; gap: 6px; border: 1px solid rgba(255,255,255,0.1); }.vb-root .vb-stage-dot { width: 8px; height: 8px; border-radius: 50%; background: #2563eb; transition: background 0.3s ease; }.vb-root .vb-unmute-overlay { position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); background: #2563eb; color: #fff; padding: 6px 14px; border-radius: 20px; font-size: 12px; z-index: 20; cursor: pointer; display: none; box-shadow: 0 2px 8px rgba(37,99,235,0.5); }.vb-root .vb-stepper-container { 
+            display: none; 
+            flex-direction: column;
+            background: #ffffff; 
+            border-bottom: 1px solid #e2e8f0; 
+            flex-shrink: 0; 
+            overflow: hidden; 
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 12px rgba(15,23,42,0.05);
+        }.vb-root .vb-stepper-container.vb-visible {
+            display: flex;
+            animation: vb-slideDownFade 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }@keyframes vb-slideDownFade{
+            from { opacity: 0; max-height: 0; transform: translateY(-8px); }
+            to { opacity: 1; max-height: 140px; transform: translateY(0); }
+        }@keyframes vb-slideUpFade{
+            from { opacity: 1; max-height: 140px; transform: translateY(0); }
+            to { opacity: 0; max-height: 0; transform: translateY(-8px); }
+        }.vb-root .vb-stepper-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 14px 4px 14px;
+            font-size: 11.5px;
+            color: #475569;
+            background: #f8fafc;
+            border-bottom: 1px dashed #e2e8f0;
+        }.vb-root .vb-stepper-title {
+            font-weight: 600;
+            color: #0f172a;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }.vb-root .vb-stepper-badge {
+            font-size: 10px;
+            padding: 1px 7px;
+            border-radius: 10px;
+            font-weight: 600;
+        }.vb-root .vb-stepper-badge.vb-running {
+            background: #eff6ff;
+            color: #2563eb;
+            border: 1px solid #bfdbfe;
+            animation: vb-pulseRecord 2s infinite;
+        }.vb-root .vb-stepper-badge.vb-done {
+            background: #eff6ff;
+            color: #2563eb;
+            border: 1px solid #bfdbfe;
+        }.vb-root .vb-stepper-close-btn {
+            background: rgba(148,163,184,0.15);
+            border: none;
+            color: #64748b;
+            font-size: 11px;
+            cursor: pointer;
+            padding: 2px 7px;
+            border-radius: 6px;
+            line-height: 1;
+        }.vb-root .vb-stepper-close-btn:hover {
+            background: #e2e8f0;
+            color: #0f172a;
+        }.vb-root .vb-stepper-steps {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 10px 12px 10px;
+            overflow-x: auto;
+        }.vb-root .vb-step { display: flex; flex-direction: column; align-items: center; position: relative; flex: 1; min-width: 48px; }.vb-root .vb-step::after { content: ''; position: absolute; top: 10px; left: 50%; width: 100%; height: 2px; background: #e2e8f0; z-index: 1; }.vb-root .vb-step:last-child::after { display: none; }.vb-root .vb-step .vb-circle { width: 22px; height: 22px; border-radius: 50%; background: #e2e8f0; color: #64748b; display: flex; align-items: center; justify-content: center; font-size: 11px; z-index: 2; position: relative; font-weight: bold; transition: all 0.3s ease; }.vb-root .vb-step.vb-active .vb-circle { background: #2563eb; color: white; box-shadow: 0 0 10px rgba(37,99,235,0.4); transform: scale(1.12); }.vb-root .vb-step.vb-done .vb-circle { background: #2563eb; color: white; }.vb-root .vb-step.vb-done::after { background: #93c5fd; }.vb-root .vb-step .vb-label { margin-top: 6px; font-size: 10px; color: #64748b; text-align: center; white-space: nowrap; }.vb-root .vb-step.vb-active .vb-label { color: #2563eb; font-weight: bold; }.vb-root .vb-step.vb-done .vb-label { color: #2563eb; font-weight: 500; }.vb-root .vb-chat-history { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; background: #f8fafc; font-size: 15px; }.vb-root .vb-msg { padding: 10px 15px; border-radius: 14px; max-width: 85%; line-height: 1.5; animation: vb-fadeIn 0.25s ease; }.vb-root .vb-msg.vb-user { background: #2563eb; color: white; align-self: flex-end; border-bottom-right-radius: 2px; }.vb-root .vb-msg.vb-ai { background: #ffffff; color: #1e293b; border: 1px solid #e2e8f0; align-self: flex-start; border-bottom-left-radius: 2px; box-shadow: 0 1px 2px rgba(0,0,0,0.03); }.vb-root .vb-msg.vb-system { background: #fef3c7; color: #92400e; border: 1px solid #fde68a; align-self: center; font-size: 13px; text-align: center; border-radius: 8px; width: 92%; padding: 8px 12px; line-height: 1.6; }@keyframes vb-fadeIn{ from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }.vb-root .vb-quick-chips-bar {
+            display: flex;
+            gap: 8px;
+            padding: 8px 12px;
+            background: #ffffff;
+            border-top: 1px solid #f1f5f9;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            flex-shrink: 0;
+        }.vb-root .vb-quick-chips-bar::-webkit-scrollbar { display: none; }.vb-root .vb-chip-item {
+            background: #f8fafc;
+            color: #334155;
+            border: 1px solid #e2e8f0;
+            padding: 5px 12px;
+            border-radius: 14px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }.vb-root .vb-chip-item:hover {
+            background: #eff6ff;
+            color: #2563eb;
+            border-color: #bfdbfe;
+        }.vb-root .vb-controls { 
+            padding: 10px 14px; 
+            padding-bottom: calc(10px + env(safe-area-inset-bottom, 15px)); 
+            display: flex; flex-direction: row; gap: 8px; background: #ffffff; border-top: 1px solid #e2e8f0; align-items: center; 
+        }.vb-root .vb-controls input { flex:1; padding: 11px 14px; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 15px; outline: none; background:#f8fafc; transition: border-color 0.2s; }.vb-root .vb-controls input:focus { border-color: #2563eb; background:#fff; }.vb-root .vb-controls .vb-btn-send { padding: 11px 18px; border: none; border-radius: 8px; font-size: 15px; color: white; cursor: pointer; font-weight: 600; background: #2563eb; }.vb-root .vb-controls .vb-voice-btn {
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            color: #475569;
+            border-radius: 8px;
+            width: 42px;
+            height: 42px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 19px;
+            cursor: pointer;
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }.vb-root .vb-controls .vb-voice-btn:hover { background: #e2e8f0; }.vb-root .vb-controls .vb-voice-btn.vb-active {
+            background: #fee2e2;
+            border-color: #f87171;
+            color: #dc2626;
+            animation: vb-pulseRecord 1s infinite;
+        }@keyframes vb-pulseRecord{
+            0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(220,38,38,0.4); }
+            50% { transform: scale(1.06); box-shadow: 0 0 0 6px rgba(220,38,38,0); }
+        }.vb-root {--bank-blue:#1d4ed8;--bank-blue-ink:#0f1f4a;--bank-muted:#93a3bd;--bank-paper:#f5f7fb;--bank-danger:#dc2626}.vb-root, .vb-root {box-sizing:border-box}.vb-root button, .vb-root input {font:inherit}.vb-root button:focus-visible, .vb-root input:focus-visible {outline:3px solid #b4c7ea;outline-offset:3px}.vb-root button svg, .vb-root [data-icon] {display:inline-flex;vertical-align:middle;align-items:center;justify-content:center;flex-shrink:0}.vb-root .vb-phone {max-width:480px;background:var(--bank-paper);box-shadow:0 0 80px #1d3f8f15;height:100dvh;min-height:0}.vb-root .vb-header {background:#fff;color:var(--bank-blue-ink);padding:15px 21px;padding-top:calc(15px + env(safe-area-inset-top));text-align:left;border-bottom:1px solid #edf1f8;box-shadow:none}.vb-root .vb-mobile-brand {display:flex;align-items:center;gap:10px}.vb-root .vb-mobile-brand-icon {width:36px;height:36px;background:#eaf0fc;border-radius:10px;color:#3b6ad8}.vb-root .vb-mobile-brand strong {display:block;font-size:14px;font-weight:600;letter-spacing:.25px}.vb-root .vb-mobile-brand small {display:block;font-size:9px;color:#9aa8c2;margin-top:5px;letter-spacing:1px}.vb-root .vb-mobile-header-badge {border:1px solid #e1e8f5;padding:4px 7px;border-radius:5px;color:#93a3c2;font-size:9px;font-weight:400}.vb-root .vb-stage-container {height:39dvh;min-height:245px;max-height:375px;background:#d3dff0;box-shadow:none;overflow:hidden}.vb-root .vb-avatar-layer {background:#d5dfef}.vb-root .vb-digital-human-wrapper {height:100%}.vb-root .vb-digital-human-img {object-position:50% 33%;animation:none!important;transform:none!important;filter:none!important;object-fit:cover}.vb-root .vb-digital-human-info {padding:40px 23px 24px;background:linear-gradient(0deg,#0f2a6ec9 0%,#1535825e 62%,transparent 100%);backdrop-filter:none;align-items:center}.vb-root .vb-dh-name-tag {gap:7px}.vb-root .vb-dh-title {font-size:24px!important;letter-spacing:1px;font-weight:500;text-shadow:none}.vb-root .vb-dh-badge {color:#e4ecfb;background:none;border:0;padding:0;font-size:10px;letter-spacing:1px}.vb-root .vb-stage-badge {top:15px;left:19px;border:1px solid #ffffffa6;border-radius:6px;background:#ffffffd9;color:#2f5bb8;backdrop-filter:blur(8px);font-size:9px;padding:6px 9px;gap:6px}.vb-root .vb-stage-dot {height:5px;width:5px;background:#5b8ae8}.vb-root .vb-stage-badge button {background:transparent!important;color:#5a7ec0!important;margin-left:2px!important;padding:0!important}.vb-root .vb-stage-badge button svg {width:14px;height:14px}.vb-root .vb-voice-wave-bar {gap:4px;height:22px;align-items:center;padding:0}.vb-root .vb-wave-item {width:3px;background:#c9d9f5;height:8px;border-radius:2px}.vb-root .vb-wave-item:nth-child(2), .vb-root .vb-wave-item:nth-child(4) {height:17px}.vb-root .vb-wave-item:nth-child(3) {height:25px}.vb-root .vb-local-video-pip {top:15px;right:17px;width:61px;height:83px;border:1px solid #fff9;border-radius:8px;box-shadow:0 4px 14px #16307a15}.vb-root .vb-chat-history {background:var(--bank-paper);padding:20px 21px 16px;gap:14px;font-size:13px;min-height:100px}.vb-root .vb-msg {font-size:12px;line-height:1.85;padding:13px 15px;border-radius:12px;max-width:92%;animation:none;overflow-wrap:anywhere}.vb-root .vb-msg.vb-ai {background:#fff;border:1px solid #e7ecf6;color:#4d5f85;border-bottom-left-radius:3px;box-shadow:0 3px 12px #1f377a03}.vb-root .vb-msg.vb-ai.vb-welcome-msg {position:relative;margin-top:21px;max-width:100%;padding:17px 18px;font-size:12px}.vb-root .vb-msg.vb-ai.vb-welcome-msg:before {content:'晨曦 · 您的数字人客户经理';position:absolute;top:-24px;left:1px;color:#8a9ab8;font-size:9px;letter-spacing:.4px}.vb-root .vb-msg.vb-user {background:#2058d6;color:#fff;border-bottom-right-radius:3px;box-shadow:none}.vb-root .vb-msg.vb-system {background:#eaf0f9;border:1px solid #dee6f3;color:#7e8dab;font-size:10px;padding:8px 12px;max-width:100%;width:auto;text-align:left;line-height:1.8;align-self:center}.vb-root .vb-msg.vb-system>div {max-width:100%;text-align:left;overflow:hidden;border-radius:9px!important;box-shadow:none!important}.vb-root .vb-msg.vb-system>div>div {overflow-wrap:anywhere}.vb-root .vb-msg.vb-ai>div, .vb-root .vb-msg.vb-system>div {font-size:12px!important}.vb-root .vb-msg strong {font-weight:600}.vb-root .vb-quick-chips-bar {background:#f5f7fb;border:0;padding:10px 21px 13px;gap:8px}.vb-root .vb-chip-item {background:#fff;border:1px solid #dbe4f2;color:#65799c;border-radius:7px;padding:8px 11px;font-size:10px;font-weight:400;min-height:34px;display:flex;align-items:center;gap:6px}.vb-root .vb-chip-item:hover {background:#eef3fd;border-color:#b3c5e4;color:#3f66bd}.vb-root .vb-chip-item svg {width:14px;height:14px}.vb-root .vb-controls {background:#fff;border-top:1px solid #e5ebf5;padding:13px 17px;padding-bottom:calc(14px + env(safe-area-inset-bottom));gap:9px;flex-shrink:0}.vb-root .vb-controls .vb-voice-btn {background:#fff;border-color:#e2e8f3;color:#6b81a8;border-radius:9px;width:42px;height:42px}.vb-root .vb-controls input {font-size:12px;background:#f3f6fc;border:1px solid #e9eef7;border-radius:8px;min-width:0;padding:12px 11px;height:42px;color:#4f6490}.vb-root .vb-controls input::placeholder {color:#9dabc6;font-size:10px}.vb-root .vb-controls input:focus {border-color:#9db4e0}.vb-root .vb-controls .vb-btn-send {width:43px;height:42px;background:var(--bank-blue);color:#fff;border-radius:9px;display:flex;justify-content:center;align-items:center;padding:0;flex-shrink:0}.vb-root .vb-stepper-container {border-bottom:1px solid #e1e8f3;box-shadow:none;background:#fff}.vb-root .vb-stepper-header {background:#f7f9fd;border-bottom:1px solid #ebf0f8;padding:8px 15px;color:#7e91b3;font-size:10px}.vb-root .vb-stepper-title {color:#4d6ba8;font-size:10px}.vb-root .vb-stepper-badge.vb-running {background:#eaf1fc;color:#4a76c8;border-color:#d7e3f5;animation:none}.vb-root .vb-stepper-steps {padding:9px 10px 11px}.vb-root .vb-step {min-width:44px}.vb-root .vb-step .vb-circle {width:20px;height:20px;font-size:9px;background:#eaf0f9;color:#93a5c4}.vb-root .vb-step.vb-active .vb-circle {background:var(--bank-blue);box-shadow:0 0 0 3px #e9f0fc;transform:none}.vb-root .vb-step.vb-done .vb-circle {background:#8fa9d6}.vb-root .vb-step .vb-label {font-size:8px;color:#96a6c1;margin-top:5px}.vb-root .vb-step.vb-active .vb-label {color:var(--bank-blue)}.vb-root .vb-step.vb-done .vb-label {color:#7590c0}.vb-root .vb-step:after {background:#dfe7f3;top:9px}.vb-root .vb-step.vb-done:after {background:#a8bde0}.vb-root .vb-unmute-overlay {background:#1747b8;font-size:10px;max-width:90%;white-space:nowrap}.vb-root .vb-consent-overlay {display:flex;position:fixed;inset:0;background:#0f204077;backdrop-filter:blur(7px);z-index:9999;align-items:center;justify-content:center;padding:24px}.vb-root .vb-consent-card {width:100%;max-width:380px;border-radius:20px;background:#fff;padding:28px 26px 19px;box-shadow:0 24px 90px #0d235f26;text-align:center;max-height:90dvh;overflow:auto}.vb-root .vb-consent-icon {height:60px;width:60px;border-radius:19px;background:#ecf1fb;color:#4874cf;display:flex;align-items:center;justify-content:center;margin:0 auto 20px}.vb-root .vb-consent-eyebrow {font-size:9px;letter-spacing:2px;color:#8f9fbe}.vb-root .vb-consent-card h2 {font-size:20px;line-height:1.5;font-weight:550;margin:10px 0;color:#24408a}.vb-root .vb-consent-intro {font-size:11px;color:#909eb9;line-height:1.9;margin:0 0 23px}.vb-root .vb-consent-items {background:#f6f8fc;border:1px solid #ebf0f8;border-radius:12px;padding:16px 14px;display:flex;flex-direction:column;gap:17px;text-align:left}.vb-root .vb-consent-items>div {display:flex;gap:10px}.vb-root .vb-consent-items [data-icon] {color:#8598bb;align-self:flex-start;margin-top:2px}.vb-root .vb-consent-items p {margin:0;font-size:10px;line-height:1.9;color:#96a3bc}.vb-root .vb-consent-items strong {display:block;font-size:11px;font-weight:550;color:#4c6494;margin-bottom:4px}.vb-root .vb-consent-items p span {display:block}.vb-root .vb-consent-demo {font-size:9px;color:#b29d6f;margin:16px 0}.vb-root .vb-consent-primary {width:100%;padding:13px 14px;display:flex;align-items:center;justify-content:center;gap:12px;background:var(--bank-blue);border:0;border-radius:9px;color:#fff;font-size:13px;font-weight:500;cursor:pointer}.vb-root .vb-consent-bottom {font-size:9px;color:#a1aec6;margin:13px 0 0}.vb-root .vb-mobile-mini-icon {display:inline-flex;vertical-align:middle;margin-right:3px;align-items:center}.vb-root .vb-mobile-mini-icon svg {width:13px;height:13px}.vb-root .vb-record-indicator {position:absolute!important;right:18px;top:95px;z-index:25;border-radius:4px!important;background:#b81c1c88!important;color:#fff0f0!important;padding:5px 7px!important;font-size:8px!important}.vb-root .vb-record-indicator[hidden], .vb-root .vb-room-status[hidden] {display:none!important}@media(min-width:600px) {.vb-root .vb-phone {height:calc(100dvh - 40px);border-radius:24px;border:1px solid #d3dcee}.vb-root .vb-stage-container {height:36dvh}}@media(max-height:700px) {.vb-root .vb-stage-container {height:32dvh;min-height:185px}.vb-root .vb-header {padding-top:11px;padding-bottom:11px}.vb-root .vb-dh-title {font-size:21px!important}.vb-root .vb-digital-human-info {padding-bottom:17px}.vb-root .vb-chat-history {padding-top:13px}.vb-root .vb-consent-card {padding:20px}.vb-root .vb-consent-icon {height:43px;width:43px;margin-bottom:13px}.vb-root .vb-consent-intro {margin-bottom:15px}.vb-root .vb-consent-items {padding:12px;gap:12px}}@media(prefers-reduced-motion:reduce) {.vb-root, .vb-root {animation:none!important;transition:none!important;scroll-behavior:auto!important}}.vb-root .vb-stepper-steps {overflow:hidden;gap:6px;align-items:flex-start;padding:12px 10px}.vb-root .vb-stepper-steps .vb-step {flex:1 1 0;min-width:0;max-width:25%}.vb-root .vb-stepper-steps .vb-label {width:100%;white-space:normal;overflow-wrap:anywhere;font-size:11px;line-height:1.5;min-height:33px;padding:0 2px}.vb-root .vb-step-ellipsis {flex:0 0 12px;color:#7c8ba8;padding-top:2px;font-size:16px}.vb-root .vb-stepper-steps .vb-circle {width:24px;height:24px;font-size:11px}.vb-root .vb-stepper-steps .vb-step:after {top:11px}.vb-root .vb-stepper-container.vb-visible {animation:none}.vb-root .vb-stepper-title {font-size:12px}.vb-root .vb-mobile-node-panel {flex:0 1 auto;max-height:42dvh;overflow:auto;background:#fff;border-bottom:1px solid #dde5f0;padding:16px 20px}.vb-root .vb-mobile-node-panel[hidden] {display:none}.vb-root .vb-mobile-node-form {color:#19365b;text-align:left}.vb-root .vb-node-eyebrow {font-size:10px;color:#607895;letter-spacing:1px}.vb-root .vb-mobile-node-form h3, .vb-root .vb-mobile-node-status h3 {font-size:18px;margin:6px 0;line-height:1.4}.vb-root .vb-mobile-node-form header p, .vb-root .vb-mobile-node-status p {font-size:12px;color:#607895;line-height:1.6;margin:6px 0 12px}.vb-root .vb-node-field {display:block;font-size:12px;font-weight:600;margin:10px 0}.vb-root .vb-node-field input {display:block;width:100%;min-width:0;height:44px;margin-top:5px;border:1px solid #cbd7e6;border-radius:8px;padding:10px 12px;background:#f8fafd;color:#16375c;font-size:16px}.vb-root .vb-node-checkbox {display:flex;gap:10px;align-items:center;font-size:13px;line-height:1.5;margin:14px 0}.vb-root .vb-node-checkbox input {width:18px;height:18px;flex-shrink:0;accent-color:#1d55bd}.vb-root .vb-node-primary {display:block;width:100%;min-height:44px;border:0;border-radius:8px;background:#1d55bd;color:#fff;font-size:14px;font-weight:600;padding:12px}.vb-root .vb-node-primary:disabled {opacity:.55}.vb-root .vb-node-form-note {font-size:11px;line-height:1.6;color:#7a6b4f;margin:10px 0}.vb-root .vb-node-form-error {font-size:12px;color:#b82d37;line-height:1.6;margin:8px 0 0}.vb-root .vb-node-form-error:empty {display:none}.vb-root .vb-header button[onclick="retryEvidence()"] {font-size:10px;padding:6px 8px;background:#f2f6fc;border:1px solid #d8e3f0;color:#42628d;border-radius:6px}.vb-root .vb-mobile-node-status {padding:0}.vb-root .vb-phone.vb-confirming .vb-chat-history, .vb-root .vb-phone.vb-confirming .vb-quick-chips-bar, .vb-root .vb-phone.vb-confirming .vb-controls {display:none}.vb-root .vb-phone.vb-confirming .vb-stage-container {height:110px;min-height:110px;max-height:110px;flex-shrink:0}.vb-root .vb-phone.vb-confirming .vb-digital-human-info {padding:10px 15px}.vb-root .vb-phone.vb-confirming .vb-dh-title {font-size:16px!important;margin-bottom:3px}.vb-root .vb-phone.vb-confirming .vb-dh-badge {font-size:10px!important}.vb-root .vb-phone.vb-confirming .vb-stepper-steps {padding:10px 8px}.vb-root .vb-phone.vb-confirming .vb-stage-badge {font-size:9px}.vb-root .vb-phone.vb-confirming .vb-mobile-node-panel {flex:1 1 0;min-height:0;max-height:none;overflow:hidden;padding:0;display:flex;flex-direction:column}.vb-root .vb-phone.vb-confirming .vb-mobile-node-form {display:flex;flex-direction:column;flex:1;min-height:0}.vb-root .vb-node-form-body {padding:18px 20px}.vb-root .vb-phone.vb-confirming .vb-node-form-body {flex:1 1 0;min-height:0;overflow-y:auto;overscroll-behavior:contain}.vb-root .vb-node-form-footer {background:#fff;border-top:1px solid #e1e8f0;padding:10px 20px calc(14px + env(safe-area-inset-bottom));flex-shrink:0}.vb-root .vb-node-form-footer .vb-node-form-note {margin:0 0 8px}.vb-root .vb-phone.vb-confirming .vb-stepper-steps .vb-label {min-height:32px}.vb-root .vb-phone.vb-confirming .vb-mobile-node-form h3 {margin:0 0 6px}.vb-root .vb-phone.vb-confirming .vb-node-eyebrow {display:none}@media(max-height:600px) {.vb-root .vb-phone.vb-confirming .vb-stage-container {height:80px;min-height:80px;max-height:80px}.vb-root .vb-phone.vb-confirming .vb-node-form-body {padding:12px 16px}.vb-root .vb-phone.vb-confirming .vb-node-form-footer {padding-left:16px;padding-right:16px}.vb-root .vb-phone.vb-confirming .vb-header {padding-top:8px;padding-bottom:8px}}.vb-root .vb-wait-tone-resume[hidden] {display:none!important}.vb-root .vb-wait-tone-resume {font-size:12px;min-height:36px;padding:6px 10px;color:#175681;background:#edf6fd;border:1px solid #bfd8eb;border-radius:6px}.vb-root .vb-mobile-node-dialog[hidden] {display:none!important}.vb-root .vb-mobile-node-dialog {position:absolute;inset:0;z-index:90;display:flex;align-items:flex-end;background:rgba(13,35,62,.48);padding:16px 0 0}.vb-root .vb-mobile-node-sheet {display:flex;flex-direction:column;width:100%;max-height:calc(100dvh - 54px);min-height:360px;background:#fff;border-radius:20px 20px 0 0;box-shadow:0 -12px 34px rgba(10,35,64,.22);overflow:hidden}.vb-root .vb-mobile-node-dialog-header {flex-shrink:0;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:15px 20px 13px;border-bottom:1px solid #dce7f0;background:#f8fbff}.vb-root .vb-mobile-node-dialog-header span {font-size:12px;color:#607895}.vb-root .vb-mobile-node-dialog-header strong {font-size:16px;line-height:1.35;color:#16375c;text-align:right}.vb-root .vb-mobile-node-dialog .vb-mobile-node-panel {display:flex;flex:1 1 0;min-height:0;max-height:none;overflow:hidden;padding:0;border:0}.vb-root .vb-mobile-node-dialog .vb-mobile-node-form {display:flex;flex:1 1 0;min-height:0;flex-direction:column}.vb-root .vb-mobile-node-dialog .vb-node-form-body {flex:1 1 0;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:18px 20px}.vb-root .vb-mobile-node-dialog .vb-node-form-footer {flex-shrink:0;background:#fff;border-top:1px solid #e1e8f0;padding:10px 20px calc(14px + env(safe-area-inset-bottom))}.vb-root .vb-mobile-node-dialog .vb-mobile-node-status, .vb-root .vb-mobile-node-dialog .vb-signature-form {width:100%;overflow-y:auto}.vb-root .vb-mobile-node-dialog .vb-signature-form .vb-node-form-body {overflow:visible}.vb-root .vb-human-wait-panel[hidden] {display:none!important}.vb-root .vb-human-wait-panel {flex-shrink:0;padding:16px 20px;background:#eef5ff;border-bottom:1px solid #c9daf4;color:#173f72}.vb-root .vb-human-wait-panel strong {font-size:16px}.vb-root .vb-human-wait-panel p {font-size:13px;line-height:1.6;margin:6px 0}.vb-root .vb-human-wait-panel button {min-height:44px}.vb-root .vb-mobile-receipt-row {padding:12px 0;border-bottom:1px solid #e1e8f0}.vb-root .vb-mobile-receipt-row span {display:block;font-size:12px;color:#607895}.vb-root .vb-mobile-receipt-row strong {display:block;font-size:15px;line-height:1.6;margin-top:5px;overflow-wrap:anywhere}.vb-root .vb-signature-form canvas {display:block;width:100%;height:150px;background:#fff;border:1px dashed #7794b5;border-radius:8px;touch-action:none;margin:8px 0 12px}.vb-root .vb-signature-label {display:block;margin-top:16px;font-size:14px;font-weight:600}.vb-root .vb-signature-form [data-clear] {min-height:44px}.vb-root .vb-document-link {display:inline-flex;margin:12px 0}.vb-root .vb-phone.vb-confirming .vb-stage-container {height:90px;min-height:90px;max-height:90px}.vb-root .vb-phone.vb-confirming .vb-stepper-steps {display:grid;grid-template-columns:repeat(4,minmax(0,1fr));overflow:hidden;gap:0;padding:10px 6px}.vb-root .vb-phone.vb-confirming .vb-step {min-width:0;width:auto;max-width:none}.vb-root .vb-phone.vb-confirming .vb-step .vb-label {box-sizing:border-box;width:100%;min-width:0;font-size:12px;line-height:18px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;overflow-wrap:normal;min-height:18px;padding:0 3px}.vb-root .vb-phone.vb-confirming .vb-stepper-header {font-size:12px;padding:10px 14px;display:flex;justify-content:space-between}.vb-root .vb-phone.vb-confirming .vb-dh-badge, .vb-root .vb-phone.vb-confirming .vb-digital-human-info {display:none}.vb-root .vb-password-help, .vb-root .vb-password-card-caption {font-size:13px;line-height:1.7;color:#526b87;margin:8px 0 16px}.vb-root .vb-password-cards {display:grid;gap:12px}.vb-root .vb-password-card {display:flex;align-items:center;gap:12px;border:1px solid #cbdbea;border-radius:10px;padding:18px;background:#f5f9fd;min-height:72px}.vb-root .vb-password-card input {width:20px;height:20px;accent-color:#135d98}.vb-root .vb-password-card strong {display:block;font-size:16px;color:#153f66}.vb-root .vb-password-card small {display:block;font-size:13px;letter-spacing:1px;margin-top:8px}.vb-root .vb-password-photo {padding:14px;border:1px solid #d5e2ed;border-radius:10px;margin-bottom:14px}.vb-root .vb-password-photo>strong {display:block;font-size:14px;margin-bottom:10px}.vb-root .vb-password-photo img {display:block;max-width:100%;max-height:160px;object-fit:contain;margin-bottom:10px}.vb-root .vb-password-photo img[hidden] {display:none}.vb-root .vb-photo-button {display:flex;justify-content:center;align-items:center;min-height:44px;padding:10px 12px;width:100%;border:1px solid #91b7d3;border-radius:7px;color:#165b8b;background:#eff7fc;cursor:pointer;position:relative;overflow:hidden;font-size:14px}.vb-root .vb-photo-button input[type=file] {position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}.vb-root .vb-password-photo [role=status] {display:block;font-size:12px;margin-top:8px;color:#526b87}.vb-root .vb-mock-details {font-size:12px;color:#677b91;margin:10px 0}.vb-root .vb-mock-details summary {padding:12px;cursor:pointer}.vb-root .vb-password-card:has(input:checked) {border-color:#137db3;box-shadow:0 0 0 2px #dbedf8}.vb-root .vb-photo-button:focus-within {outline:3px solid #8cb9e2;outline-offset:2px}

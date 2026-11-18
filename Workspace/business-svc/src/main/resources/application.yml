@@ -1,0 +1,109 @@
+server:
+  port: 8080
+  servlet:
+    session:
+      timeout: 30m
+      cookie:
+        http-only: true
+        secure: true
+        same-site: strict
+  error:
+    # 浏览器侧的唯一入口，业务提示要能出现在错误体里。
+    include-message: always
+  ssl:
+    enabled: true
+    key-store: classpath:keystore.p12
+    key-store-password: password
+    key-store-type: PKCS12
+    key-alias: springboot
+
+spring:
+  datasource:
+    # 业务库独立：biz_record / biz_record_segment / biz_action_log / sys_notice 四张表
+    # 由 BizRecordService 的 @PostConstruct 自动建，改指向即自动落到本库。
+    # 流程引擎的 ACT_* 表在 bank_workflow，本服务不持有、也读不到。
+    url: jdbc:mysql://localhost:3306/bank_business?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true&createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: test_user
+    password: Root@0258
+  servlet:
+    multipart:
+      max-file-size: 200MB
+      max-request-size: 200MB
+
+# 业务逻辑服务是唯一对外 REST 入口，对内经 HTTP 调其余服务。
+# 服务间走明文 HTTP：这些调用只在服务端之间发生，不经浏览器，不存在混合内容问题。
+#
+# 业务中枢组织流程、路由、媒体命令；各专业服务不互相代行职责。
+business:
+  auth:
+    # 本地演示显式启用，生产部署必须关闭并通过人员开户流程配置账号。
+    demo-accounts-enabled: ${DEMO_ACCOUNTS_ENABLED:true}
+  media-base-url: ${BUSINESS_MEDIA_BASE_URL:http://localhost:8084}
+  routing-base-url: ${ROUTING_BASE_URL:http://localhost:8081}
+  signaling-base-url: ${SIGNALING_BASE_URL:http://localhost:8082}
+  workflow-base-url: ${WORKFLOW_BASE_URL:http://localhost:8083}
+
+# 坐席心跳：上行登记 + 顺带回执。这是服务端向坐席低成本下行指令的唯一时机，
+# 但振铃这类重量级事件仍走信令推送，不塞进心跳响应（否则延迟会被拉到心跳周期）。
+presence:
+  heartbeat-interval-ms: 15000
+  # 心跳停滞判定阈值。与信令侧的连接事件互为兜底：连接事件抓正常关闭（秒级），
+  # 心跳停滞抓被杀进程与半开连接（这两个场景下被杀进程自己发不出任何通知）。
+  heartbeat-timeout-ms: 45000
+
+digital-human:
+  llm:
+    # 供应商聚合端点：/provider/v1 下的模型必须带命名空间前缀（如 xiaomi/…），
+    # 用裸模型名会被拒：400 unsupported_model。getApiUrl() 会自动补 /chat/completions。
+    api-url: ${LLM_API_URL:https://api.commandcode.ai/provider/v1}
+    api-key: ${LLM_API_KEY:user_22qW6QGMrvV3pEutiC9wKqkuN4sxJRMYU1RabxoFPxLhWiGAuR7tQepHqfcBdjuoMZyqN4SG6CcPj88nQnARcXZR}
+    model: ${LLM_MODEL:deepseek/deepseek-v4.1-flash}
+    temperature: 0.1
+    timeout-ms: 30000
+  profile:
+    name: "晨曦"
+    title: "银行智能客户经理 · 晨曦"
+    role-tag: "AI 专属顾问"
+    avatar-url: "/images/shuziren.png"
+    greeting: "您好！我是您的专属金融数字顾问晨曦。我可以帮您办理转账汇款、查询余额，或解答各类银行业务咨询。请问今天有什么可以帮您？"
+    persona-prompt: >
+      你是由商业银行打造的专业智能数字员工“晨曦”，形象温和端庄、专业严谨且富有亲和力。
+      你的主要职责包括：
+      1. 协助客户办理银行转账与查询业务；
+      2. 解答关于银行政策、转账限额、手续费、理财产品、防诈安全等业务咨询；
+      3. 在需要人工复核授权或客户明确要求时，平滑转接远程座席。
+  rules:
+    video-auth-threshold: 500000.0
+    quick-questions:
+      - "💳 给王总转账200万"
+      - "💳 给李四转账1000元"
+      - "💰 查询账户余额"
+      - "📋 转账限额是多少？"
+      - "📈 热门理财推荐"
+      - "🧑‍💼 转人工客服"
+  knowledge-base:
+    - category: "业务规则"
+      question: "转账限额是多少？"
+      keywords: ["限额", "额度", "最多转多少", "大额"]
+      answer: "我行手机银行单笔转账限额为50万元；单笔50万元以内可通过智能数字人直通核心系统记账；若单笔超过50万元，系统将自动触发反欺诈风控规则，为您接通远程座席进行双向音视频面对面核验。"
+    - category: "资费说明"
+      question: "转账手续费怎么收取？"
+      keywords: ["手续费", "收费", "扣费", "免费"]
+      answer: "目前我行个人手机银行及智能数字人办理的本行转账、跨行转账均享受手续费全免优惠，不收取任何额外费用。"
+    - category: "网点服务"
+      question: "营业时间和网点服务时间？"
+      keywords: ["营业时间", "上班时间", "下班", "网点", "开门"]
+      answer: "智能数字人与手机银行提供 7×24 小时不间断服务；线下营业网点服务时间一般为工作日 09:00 - 17:00，周末提供个人业务便民服务。"
+    - category: "财富管理"
+      question: "有什么理财产品推荐？"
+      keywords: ["理财", "收益", "存款", "利率", "买理财", "安心盈"]
+      answer: "目前我行主推两款产品：1.『安心盈·活期添利』：七日年化收益约2.85%，T+0极速赎回，适合日常闲钱增值；2.『丰收存·大额存单』：三年期年化利率2.95%，50万元起存，保本保息，受存款保险保障。"
+    - category: "安全风控"
+      question: "遇到电信诈骗或异常交易怎么办？"
+      keywords: ["诈骗", "被骗", "冻结", "挂失", "安全", "异常"]
+      answer: "请立即中止操作！您可通过手机银行『一键安全锁』快速冻结账户，或直接对我说『转人工客服』由座席为您紧急挂失，也可拨打全国反诈热线 96110。"
+
+logging:
+  level:
+    com.example.bank.business: INFO

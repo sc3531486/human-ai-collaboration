@@ -1,0 +1,12 @@
+{
+  "agents": [
+    {"agentId":"AGENT-9527","name":"林晓","skills":["GENERAL","VIP","PRIVATE_BANKING","AUTHORIZATION"]},
+    {"agentId":"AGENT-1024","name":"王敏","skills":["GENERAL","AUTHORIZATION"]},
+    {"agentId":"AGENT-2048","name":"陈磊","skills":["VIP","PRIVATE_BANKING","AUTHORIZATION"]}
+  ],
+  "digitalHumans": [
+    {"digitalHumanId":"DH-001","name":"智能数字员工·晨曦","skills":["GENERAL","VIP","PRIVATE_BANKING"],"status":"ONLINE"},
+    {"digitalHumanId":"DH-002","name":"智能数字员工·星野","skills":["GENERAL","VIP"],"status":"ONLINE"},
+    {"digitalHumanId":"DH-003","name":"智能数字员工·澜汐","skills":["GENERAL"],"status":"ONLINE"}
+  ]
+}

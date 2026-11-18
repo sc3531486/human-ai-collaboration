@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:flowable="http://flowable.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" targetNamespace="Bank">
+  <process id="advanced_sop" name="转账汇款" isExecutable="true">
+    <extensionElements>
+      <flowable:notify targets="CUSTOMER"/>
+    </extensionElements>
+    <startEvent id="start"/>
+    <receiveTask id="ai_collect" name="信息采集">
+      <extensionElements>
+        <flowable:handling handler="DIGITAL" submitter="CUSTOMER" assignment="NONE" skillGroup="GENERAL" retainAgent="false" communication="NONE" mobilePage="collect" agentPage="collect"/>
+        <flowable:notify targets="CUSTOMER"/>
+        <flowable:field name="actors" stringValue="CUSTOMER,AGENT"/>
+        <flowable:field name="actionCode" stringValue="SUBMIT,REQUEST_HUMAN"/>
+        <flowable:field name="ui">
+          <flowable:string><![CDATA[{"view":"collect","title":"信息采集","actionLabel":"确认交易信息","fields":[{"name":"amount","label":"转账金额（元）","type":"number","required":true,"min":0.01,"scale":2},{"name":"payee","label":"收款人姓名","type":"text","required":true},{"name":"payee_account","label":"收款账号","type":"text","required":true,"pattern":"[0-9]{10,30}"},{"name":"purpose","label":"用途","type":"text"}]}]]></flowable:string>
+        </flowable:field>
+        <flowable:executionListener event="start" delegateExpression="${businessNodeActions}"/>
+        <flowable:executionListener event="end" delegateExpression="${businessNodeActions}"/>
+      </extensionElements>
+    </receiveTask>
+    <serviceTask id="risk_check" name="风控评估" flowable:delegateExpression="${apiTaskDelegate}">
+      <extensionElements>
+        <flowable:notify targets="CUSTOMER"/>
+        <flowable:capability code="risk.evaluate.v1" inputs="amount=amount,payee=payee" outputs="needHuman=needHuman,riskScore=riskScore,riskDecision=riskDecision" phase="execute" readOnly="false"/>
+      </extensionElements>
+    </serviceTask>
+    <!-- 显式转人工：客户在信息采集节点主动请求人工时直接进入人工授权，
+         与风控判定 needHuman 是两条独立入口（改造方案 §14 第 4 行「高风险/显式转人工」）。 -->
+    <exclusiveGateway id="request_gateway" default="b"/>
+    <exclusiveGateway id="risk_gateway" default="risk_direct"/>
+    <userTask id="human_auth" name="人工授权">
+      <extensionElements>
+        <flowable:handling handler="HUMAN" submitter="AGENT" assignment="NEW" skillGroup="GENERAL" retainAgent="true" communication="VIDEO" mobilePage="witness" agentPage="witness"/>
+        <flowable:notify targets="CUSTOMER,AGENT"/>
+        <flowable:field name="actors" stringValue="AGENT"/>
+        <flowable:field name="actionCode" stringValue="AUTHORIZE"/>
+        <flowable:field name="ui">
+          <flowable:string><![CDATA[{"view":"witness","video":true,"title":"人工授权","actionLabel":"确认授权，进入客户签名","displayFields":[{"name":"amount","label":"转账金额（元）"},{"name":"payee","label":"收款人姓名"},{"name":"payee_account","label":"收款账号"},{"name":"purpose","label":"用途"}],"evidence":{"required":true,"kind":"CUSTOMER_PHOTO"},"fields":[{"name":"evidence_receipt","label":"现场照片凭证","type":"hidden","required":true},{"name":"confirmed","label":"已核实身份及交易意愿","type":"checkbox","required":true}]}]]></flowable:string>
+        </flowable:field>
+        <flowable:executionListener event="start" delegateExpression="${businessNodeActions}"/>
+        <flowable:executionListener event="end" delegateExpression="${businessNodeActions}"/>
+        <flowable:taskListener event="create" delegateExpression="${businessNodeActions}"/>
+        <flowable:transition releaseAgent="false" closeRoom="false"/>
+      </extensionElements>
+    </userTask>
+    <receiveTask id="customer_sign" name="客户签名">
+      <extensionElements>
+        <flowable:handling handler="DIGITAL" submitter="CUSTOMER" assignment="NONE" skillGroup="GENERAL" retainAgent="true" communication="KEEP" mobilePage="signature" agentPage="signature"/>
+        <flowable:notify targets="CUSTOMER,AGENT"/>
+        <flowable:field name="actors" stringValue="CUSTOMER"/>
+        <flowable:field name="actionCode" stringValue="SUBMIT"/>
+        <flowable:field name="ui">
+          <flowable:string><![CDATA[{"view":"signature","title":"客户签名","actionLabel":"提交签名，等待人工核实","displayFields":[{"name":"amount","label":"转账金额（元）"},{"name":"payee","label":"收款人姓名"},{"name":"payee_account","label":"收款账号"},{"name":"purpose","label":"用途"}],"fields":[{"name":"signature_image","label":"手写签名","type":"signature","required":true,"evidenceKind":"CUSTOMER_SIGNATURE"},{"name":"confirmed","label":"已核对并同意转账","type":"checkbox","required":true}]}]]></flowable:string>
+        </flowable:field>
+        <flowable:executionListener event="start" delegateExpression="${businessNodeActions}"/>
+        <flowable:executionListener event="end" delegateExpression="${businessNodeActions}"/>
+      </extensionElements>
+    </receiveTask>
+    <userTask id="signature_review" name="人工核实签名">
+      <extensionElements>
+        <flowable:handling handler="HUMAN" submitter="AGENT" assignment="REUSE" skillGroup="GENERAL" retainAgent="false" communication="VIDEO" mobilePage="signature-review" agentPage="signature-review"/>
+        <flowable:notify targets="CUSTOMER,AGENT"/>
+        <flowable:field name="actors" stringValue="AGENT"/>
+        <flowable:field name="actionCode" stringValue="AUTHORIZE,REJECT"/>
+        <flowable:field name="ui">
+          <flowable:string><![CDATA[{"view":"signature-review","title":"人工核实签名","actionLabel":"核实通过并转账","displayFields":[{"name":"amount","label":"转账金额（元）"},{"name":"payee","label":"收款人姓名"},{"name":"payee_account","label":"收款账号"},{"name":"purpose","label":"用途"},{"name":"signature_image","label":"客户签名","type":"image"}],"fields":[{"name":"confirmed","label":"签名与交易要素核实无误","type":"checkbox","required":true},{"name":"review_reason","label":"退回原因（退回时填写）","type":"text"}]}]]></flowable:string>
+        </flowable:field>
+        <flowable:executionListener event="start" delegateExpression="${businessNodeActions}"/>
+        <flowable:executionListener event="end" delegateExpression="${businessNodeActions}"/>
+        <flowable:taskListener event="create" delegateExpression="${businessNodeActions}"/>
+        <flowable:transition releaseAgent="false" closeRoom="false"/>
+      </extensionElements>
+    </userTask>
+    <exclusiveGateway id="review_gateway" default="review_pass"/>
+    <serviceTask id="sign_document" name="签字单归档" flowable:delegateExpression="${apiTaskDelegate}">
+      <extensionElements>
+        <flowable:capability code="transfer.signature.v1" inputs="amount=amount,payeeName=payee,payeeAccount=payee_account,purpose=purpose,signatureImage=signature_image" outputs="signatureDocumentId=signatureDocumentId,signatureDocumentUrl=signatureDocumentUrl" phase="execute" readOnly="false"/>
+      </extensionElements>
+    </serviceTask>
+    <serviceTask id="core_transfer" name="执行转账" flowable:delegateExpression="${apiTaskDelegate}">
+      <extensionElements>
+        <flowable:capability code="core.transfer.v1" inputs="amount=amount,payeeName=payee,payeeAccount=payee_account,purpose=purpose,signatureDocumentId=signatureDocumentId" outputs="coreTxId=coreTxId,statusDesc=statusDesc,business_success=_succeeded" phase="execute" readOnly="false"/>
+      </extensionElements>
+    </serviceTask>
+    <serviceTask id="receipt_doc" name="生成回执" flowable:delegateExpression="${apiTaskDelegate}">
+      <extensionElements>
+        <flowable:capability code="transfer.receipt.v1" inputs="amount=amount,payeeName=payee,payeeAccount=payee_account,purpose=purpose,signatureDocumentId=signatureDocumentId,coreTxId=coreTxId" outputs="receiptPdfUrl=receiptPdfUrl,receiptDocumentId=receiptDocumentId" phase="execute" readOnly="false"/>
+      </extensionElements>
+    </serviceTask>
+    <serviceTask id="notify_result" name="结果通知" flowable:delegateExpression="${apiTaskDelegate}">
+      <extensionElements>
+        <!-- 短信网关按模板渲染「尾号…向 X 转账 ¥Y 元」：amount 与 payee 是模板必需字段，
+             漏映射会让通知节点取不到金额，被网关以 400「缺少金额 amount」拒绝，
+             整笔业务在最后一步回滚（签字与转账已发生却无法通知、也无法办结）。 -->
+        <flowable:capability code="notification.send.v1" inputs="mobile=customer_mobile_masked,amount=amount,payeeName=payee,payeeAccount=payee_account" outputs="notificationStatus=statusDesc,notificationMsgId=msgId" phase="execute" readOnly="false"/>
+        <flowable:field name="ui">
+          <flowable:string><![CDATA[{"view":"broadcast","title":"转账结果","displayFields":[{"name":"coreTxId","label":"交易流水"},{"name":"statusDesc","label":"办理结果"},{"name":"receiptPdfUrl","label":"PDF回执","type":"document"}]}]]></flowable:string>
+        </flowable:field>
+      </extensionElements>
+    </serviceTask>
+    <endEvent id="end"/>
+    <sequenceFlow id="a" sourceRef="start" targetRef="ai_collect"/>
+    <sequenceFlow id="collect_request" sourceRef="ai_collect" targetRef="request_gateway"/>
+    <sequenceFlow id="request_human" sourceRef="request_gateway" targetRef="human_auth">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${action == 'REQUEST_HUMAN'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="b" sourceRef="request_gateway" targetRef="risk_check"/>
+    <sequenceFlow id="c" sourceRef="risk_check" targetRef="risk_gateway"/>
+    <sequenceFlow id="risk_manual" sourceRef="risk_gateway" targetRef="human_auth">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${flowData.value(execution,'needHuman') == true}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="risk_direct" sourceRef="risk_gateway" targetRef="customer_sign"/>
+    <sequenceFlow id="d" sourceRef="human_auth" targetRef="customer_sign"/>
+    <sequenceFlow id="e" sourceRef="customer_sign" targetRef="signature_review"/>
+    <sequenceFlow id="f" sourceRef="signature_review" targetRef="review_gateway"/>
+    <sequenceFlow id="review_retry" sourceRef="review_gateway" targetRef="customer_sign">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${action == 'REJECT'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="review_pass" sourceRef="review_gateway" targetRef="sign_document"/>
+    <sequenceFlow id="sign_to_transfer" sourceRef="sign_document" targetRef="core_transfer"/>
+    <sequenceFlow id="transfer_to_receipt" sourceRef="core_transfer" targetRef="receipt_doc"/>
+    <sequenceFlow id="receipt_to_notify" sourceRef="receipt_doc" targetRef="notify_result"/>
+    <sequenceFlow id="g" sourceRef="notify_result" targetRef="end"/>
+  </process>
+  <bpmndi:BPMNDiagram id="AUTO_DIAGRAM_advanced_sop">
+    <bpmndi:BPMNPlane id="AUTO_PLANE_advanced_sop" bpmnElement="advanced_sop">
+      <bpmndi:BPMNShape id="AUTO_SHAPE_advanced_sop_start" bpmnElement="start">
+        <omgdc:Bounds x="52.0" y="135.66667" width="36.0" height="36.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="AUTO_SHAPE_advanced_sop_end" bpmnElement="end">
+        <omgdc:Bounds x="1808.0" y="135.66667" width="36.0" height="36.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="AUTO_SHAPE_advanced_sop_human_auth" bpmnElement="human_auth">
+        <omgdc:Bounds x="778.0" y="52.0" width="120.0" height="80.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="AUTO_SHAPE_advanced_sop_signature_review" bpmnElement="signature_review">
+        <omgdc:Bounds x="1218.0" y="122.0" width="120.0" height="80.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="AUTO_SHAPE_advanced_sop_risk_check" bpmnElement="risk_check">
+        <omgdc:Bounds x="408.0" y="113.666664" width="120.0" height="80.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="AUTO_SHAPE_advanced_sop_core_transfer" bpmnElement="core_transfer">
+        <omgdc:Bounds x="1588.0" y="113.666664" width="120.0" height="80.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="AUTO_SHAPE_advanced_sop_ai_collect" bpmnElement="ai_collect">
+        <omgdc:Bounds x="193.0" y="116.166695" width="105.0" height="74.99999"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="AUTO_SHAPE_advanced_sop_customer_sign" bpmnElement="customer_sign">
+        <omgdc:Bounds x="998.0" y="108.666664" width="120.0" height="80.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="AUTO_SHAPE_advanced_sop_request_gateway" bpmnElement="request_gateway">
+        <omgdc:Bounds x="328.0" y="128.66667" width="50.0" height="50.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="AUTO_SHAPE_advanced_sop_risk_gateway" bpmnElement="risk_gateway">
+        <omgdc:Bounds x="628.0" y="128.66667" width="50.0" height="50.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="AUTO_SHAPE_advanced_sop_review_gateway" bpmnElement="review_gateway">
+        <omgdc:Bounds x="1438.0" y="128.66667" width="50.0" height="50.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="AUTO_EDGE_advanced_sop_a" bpmnElement="a">
+        <omgdi:waypoint x="88.0" y="153.66667"/>
+        <omgdi:waypoint x="193.0" y="153.6667"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="AUTO_EDGE_advanced_sop_collect_request" bpmnElement="collect_request">
+        <omgdi:waypoint x="298.0" y="153.66667"/>
+        <omgdi:waypoint x="328.0" y="153.66667"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="AUTO_EDGE_advanced_sop_request_human" bpmnElement="request_human">
+        <omgdi:waypoint x="353.0" y="128.66667"/>
+        <omgdi:waypoint x="353.0" y="92.0"/>
+        <omgdi:waypoint x="778.0" y="92.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="AUTO_EDGE_advanced_sop_b" bpmnElement="b">
+        <omgdi:waypoint x="378.0" y="153.66667"/>
+        <omgdi:waypoint x="408.0" y="153.66667"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="AUTO_EDGE_advanced_sop_c" bpmnElement="c">
+        <omgdi:waypoint x="528.0" y="153.66667"/>
+        <omgdi:waypoint x="628.0" y="153.66667"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="AUTO_EDGE_advanced_sop_risk_manual" bpmnElement="risk_manual">
+        <omgdi:waypoint x="678.0" y="145.33333"/>
+        <omgdi:waypoint x="688.0" y="145.33333"/>
+        <omgdi:waypoint x="688.0" y="92.0"/>
+        <omgdi:waypoint x="778.0" y="92.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="AUTO_EDGE_advanced_sop_risk_direct" bpmnElement="risk_direct">
+        <omgdi:waypoint x="678.0" y="162.0"/>
+        <omgdi:waypoint x="998.0" y="162.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="AUTO_EDGE_advanced_sop_d" bpmnElement="d">
+        <omgdi:waypoint x="898.0" y="92.0"/>
+        <omgdi:waypoint x="908.0" y="92.0"/>
+        <omgdi:waypoint x="908.0" y="135.33333"/>
+        <omgdi:waypoint x="998.0" y="135.33333"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="AUTO_EDGE_advanced_sop_e" bpmnElement="e">
+        <omgdi:waypoint x="1118.0" y="162.0"/>
+        <omgdi:waypoint x="1218.0" y="162.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="AUTO_EDGE_advanced_sop_f" bpmnElement="f">
+        <omgdi:waypoint x="1338.0" y="162.0"/>
+        <omgdi:waypoint x="1438.0" y="162.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="AUTO_EDGE_advanced_sop_review_retry" bpmnElement="review_retry">
+        <omgdi:waypoint x="1438.0" y="145.33333"/>
+        <omgdi:waypoint x="1348.0" y="145.33333"/>
+        <omgdi:waypoint x="1348.0" y="91.0"/>
+        <omgdi:waypoint x="1128.0" y="91.0"/>
+        <omgdi:waypoint x="1128.0" y="135.33333"/>
+        <omgdi:waypoint x="1118.0" y="135.33333"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="AUTO_EDGE_advanced_sop_review_pass" bpmnElement="review_pass">
+        <omgdi:waypoint x="1488.0" y="153.66667"/>
+        <omgdi:waypoint x="1588.0" y="153.66667"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="AUTO_EDGE_advanced_sop_g" bpmnElement="g">
+        <omgdi:waypoint x="1708.0" y="153.66667"/>
+        <omgdi:waypoint x="1808.0" y="153.66667"/>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

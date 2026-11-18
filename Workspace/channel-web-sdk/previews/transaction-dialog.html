@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>手机交易弹框 · 实际组件预览</title>
+<link rel="stylesheet" href="/src/styles/vb-banking.css"><link rel="stylesheet" href="/src/styles/hologram.css"><link rel="stylesheet" href="/src/styles/node-dialog.css">
+<style>
+body{margin:0;background:#e9eef5;font-family:system-ui,"Microsoft YaHei",sans-serif;color:#18324f}nav{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;padding:14px}nav button{padding:10px 14px;border:1px solid #bbcadd;border-radius:8px;background:white;color:#18324f;cursor:pointer;font:inherit}nav button[aria-pressed=true]{background:#1764c0;color:white;border-color:#1764c0}.preview{margin:auto;width:390px;max-width:calc(100vw - 24px)}.preview .vb-phone{position:relative;width:100%;height:720px;max-height:calc(100dvh - 100px);border:1px solid #c7d3e2;border-radius:22px;overflow:hidden;box-sizing:border-box;margin:auto}.preview .context{padding:24px 20px;line-height:1.8}.preview .context h2{font-size:20px}.preview .context article{margin-top:60px;border:1px solid #d9e2ed;border-radius:14px;padding:18px;background:white}.preview .vb-mobile-node-dialog{position:absolute;inset:0}.preview.wide{width:700px}.preview.wide .vb-phone{height:360px;max-width:none}#result{text-align:center;font-size:14px;padding:10px}
+</style>
+</head>
+<body>
+<nav aria-label="预览场景"><button data-scene="signature">客户签字</button><button data-scene="transfer">转账信息</button><button data-scene="photos">证件上传</button><button data-scene="sms">短信验证</button><button id="size">切换横屏</button></nav>
+<main class="preview vb-root"><section class="vb-phone"><div class="context"><h2>远程视频银行</h2><article>您好，请核对本次业务信息。<br>数字人与客户的对话页面仍保留在弹框下方。</article></div><section class="vb-mobile-node-dialog" role="dialog" aria-modal="true" aria-labelledby="preview-title"><article class="vb-mobile-node-sheet"><header class="vb-mobile-node-dialog-header"><strong id="preview-title"></strong></header><section class="vb-mobile-node-panel"></section></article></section></section></main><p id="result" role="status"></p>
+<script type="module">
+import GenericNode from '/src/ui/GenericNode.js';
+const samples={
+signature:{title:'核对办理单并签字',actionLabel:'确认并提交签字',displayFields:[{name:'payee',label:'收款人'},{name:'account',label:'收款账号'},{name:'amount',label:'转账金额',type:'money'}],fields:[{name:'signature_image',type:'signature'},{name:'confirmed',label:'我已核对上述信息，同意办理本次业务',type:'checkbox'}]},
+transfer:{title:'填写转账信息',actionLabel:'确认交易信息',fields:[{name:'payee',label:'收款人姓名',type:'text',required:true},{name:'payee_account',label:'收款账号',type:'text',required:true},{name:'amount',label:'转账金额（元）',type:'number',required:true},{name:'purpose',label:'转账用途',type:'text'}]},
+photos:{title:'上传身份证正反面',actionLabel:'提交证件并接入坐席',fields:[{name:'selected_card_id',label:'办理银行卡',type:'card',required:true},{name:'id_front_photo',label:'身份证人像面',type:'photo',evidenceKind:'ID_FRONT',required:true},{name:'id_back_photo',label:'身份证国徽面',type:'photo',evidenceKind:'ID_BACK',required:true}]},
+sms:{title:'短信验证',actionLabel:'验证并继续',displayFields:[{name:'mobile',label:'接收手机号'}],fields:[{name:'sms_code',label:'短信验证码',type:'text',maxLength:6,pattern:'[0-9]{6}',required:true}]}
+};
+let release;function show(scene){release?.();document.querySelector('#preview-title').textContent=samples[scene].title;document.querySelectorAll('[data-scene]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.scene===scene)));release=GenericNode.mount(document.querySelector('.vb-mobile-node-panel'),{nodePolicy:{actors:['CUSTOMER'],action:'SUBMIT',...samples[scene]}},{values:{payee:'李四',account:'6222 0210 **** 3456',amount:1000,purpose:'日常转账',mobile:'138 **** 5678',cards:[{id:'CARD-001',label:'储蓄卡 · 3456',cardNoMasked:'622202******3456'},{id:'CARD-002',label:'储蓄卡 · 4321',cardNoMasked:'622202******4321'}]},primeAudio(){},async photoUpload(){return{fileUrl:'/records/preview.png',eventId:'preview'};},async submit(){document.querySelector('#result').textContent='组件提交校验通过（仅预览，不发起交易）';}});}
+document.querySelectorAll('[data-scene]').forEach(button=>button.onclick=()=>show(button.dataset.scene));document.querySelector('#size').onclick=()=>{document.querySelector('.preview').classList.toggle('wide');};show('signature');
+</script>
+</body></html>

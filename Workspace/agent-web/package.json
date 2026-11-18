@@ -1,0 +1,26 @@
+{
+  "name": "agent-web",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "远程视频银行 · 坐席 PC 工作台（Vue 3 + Vite + Element Plus）",
+  "scripts": {
+    "predev": "node scripts/copy-video-widget-dist.mjs",
+    "prebuild": "node scripts/copy-video-widget-dist.mjs",
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "check": "node scripts/check-registry.mjs",
+    "test": "node --test \"tests/**/*.test.mjs\""
+  },
+  "dependencies": {
+    "centrifuge": "^5.4.0",
+    "element-plus": "^2.8.8",
+    "pinia": "^2.2.6",
+    "vue": "^3.5.13"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.2.1",
+    "vite": "^5.4.11"
+  }
+}

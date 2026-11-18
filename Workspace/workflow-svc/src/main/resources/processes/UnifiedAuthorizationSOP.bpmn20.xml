@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:flowable="http://flowable.org/bpmn" targetNamespace="Bank">
+<process id="unified_authorization_sop" name="统一授权" isExecutable="true"><extensionElements><flowable:notify targets="AGENT"/></extensionElements><startEvent id="start"/>
+<serviceTask id="load_authorization" name="读取授权资料" flowable:delegateExpression="${apiTaskDelegate}"><extensionElements><flowable:capability code="authorization.load.v1" inputs="authorizationId=authorization_id" outputs="authorizationSnapshot=authorizationSnapshot,authorizationReason=authorizationReason,authorizationRequester=authorizationRequester,parentProcessId=parentProcessId" phase="execute" readOnly="true"/></extensionElements></serviceTask>
+<userTask id="authorization_review" name="统一授权资料审核"><extensionElements>
+<flowable:handling handler="HUMAN" submitter="AGENT" assignment="NEW" skillGroup="AUTHORIZATION" retainAgent="false" communication="KEEP" mobilePage="witness" agentPage="authorization-review"/>
+<flowable:notify targets="AGENT"/>
+<flowable:field name="actors" stringValue="AGENT"/><flowable:field name="actionCode" stringValue="AUTHORIZE,REJECT"/>
+<flowable:field name="ui"><flowable:string><![CDATA[{"view":"authorization-review","title":"统一授权资料审核","actionLabel":"授权通过","fields":[{"name":"authorization_confirmed","label":"已核对原业务资料、客户身份与核验结果","type":"checkbox","required":true},{"name":"review_reason","label":"授权意见／不通过原因","type":"text"}]}]]></flowable:string></flowable:field>
+<flowable:capability code="authorization.decide.v1" inputs="authorizationId=authorization_id,agentId=agent_session_id,decision=action,opinion=review_reason" outputs="authorizationApproved=authorizationApproved,authorizationDecisionId=authorizationDecisionId,authorizationMessage=authorizationMessage" phase="end" readOnly="false"/><flowable:capability code="authorization.decide.v1" inputs="authorizationId=authorization_id,agentId=agent_session_id,decision=action,opinion=review_reason" outputs="authorizationApproved=authorizationApproved,authorizationDecisionId=authorizationDecisionId,authorizationMessage=authorizationMessage" phase="reject" readOnly="false"/><flowable:transition releaseAgent="false" closeRoom="false"/><flowable:executionListener event="start" delegateExpression="${businessNodeActions}"/><flowable:executionListener event="end" delegateExpression="${businessNodeActions}"/>
+<flowable:taskListener event="create" delegateExpression="${businessNodeActions}"/>
+</extensionElements></userTask>
+<endEvent id="end"/>
+<sequenceFlow id="a" sourceRef="start" targetRef="load_authorization"></sequenceFlow>
+<sequenceFlow id="b" sourceRef="load_authorization" targetRef="authorization_review"></sequenceFlow>
+<sequenceFlow id="c" sourceRef="authorization_review" targetRef="end"></sequenceFlow>
+</process></definitions>

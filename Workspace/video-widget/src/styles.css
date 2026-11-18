@@ -1,0 +1,262 @@
+/**
+ * 远程视频银行 · 独立视频控件样式（构建后为 dist/vb-video.css）。
+ *
+ * 规则：
+ *  - 全部选择器限定在 `.vb-` 前缀下，不使用标签选择器、不污染宿主页面；
+ *  - 控件自己管定位（overlay 绝对定位 / dock 由宿主流式布局），宿主只给容器；
+ *  - 画面 object-fit: cover —— 窗口比例变了裁画面，不出现黑边（§8.4-6 同口径）。
+ */
+
+.vb-video-stage {
+    position: absolute;
+    box-sizing: border-box;
+    overflow: hidden;
+    background: #101418;
+    border-radius: 8px;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.35);
+    font-family: "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+    color: #e8edf2;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.vb-video-stage *,
+.vb-video-stage *::before,
+.vb-video-stage *::after {
+    box-sizing: border-box;
+}
+
+/* 拖拽窗口：手势落在控件上时不触发宿主页面滚动。 */
+.vb-video-stage.is-draggable {
+    touch-action: none;
+}
+
+.vb-video-stage.is-dragging {
+    cursor: move;
+    opacity: 0.92;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+/* [hidden] 不能被下面的 display 规则盖掉 */
+.vb-video-stage [hidden] {
+    display: none !important;
+}
+
+/* ---------- 画面 ---------- */
+
+.vb-stage__video {
+    display: block;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: #000;
+    object-fit: cover;
+}
+
+/* 远端画面铺满整窗；本地画面是窗内 PiP 小窗。 */
+.vb-stage__remote {
+    position: absolute;
+    inset: 0;
+}
+
+.vb-stage__local {
+    position: absolute;
+    left: 6px;
+    bottom: 34px;
+    width: 34%;
+    max-width: 150px;
+    aspect-ratio: 4 / 3;
+    height: auto;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
+    z-index: 2;
+    transform: scaleX(-1); /* 自拍镜像 */
+}
+
+/* ---------- 占位 ---------- */
+
+.vb-stage__placeholder {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: linear-gradient(160deg, #16202a 0%, #101418 100%);
+    color: #93a3b3;
+    z-index: 1;
+}
+
+.vb-stage__ph-icon {
+    display: block;
+    opacity: 0.85;
+}
+
+.vb-stage__ph-text {
+    margin: 0;
+    font-size: 13px;
+    letter-spacing: 0.04em;
+}
+
+/* ---------- 徽标 ---------- */
+
+.vb-stage__badge {
+    position: absolute;
+    top: 6px;
+    left: 6px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: rgba(10, 14, 18, 0.72);
+    font-size: 12px;
+    line-height: 1.6;
+    z-index: 3;
+}
+
+.vb-stage__dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #8a97a5;
+}
+
+.vb-stage__badge.vb-badge--live .vb-stage__dot {
+    background: #2ecc71;
+    box-shadow: 0 0 6px rgba(46, 204, 113, 0.9);
+}
+
+.vb-stage__badge.vb-badge--mock .vb-stage__dot {
+    background: #f1c40f;
+}
+
+.vb-stage__rec {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    background: rgba(190, 40, 40, 0.9);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    z-index: 3;
+}
+
+/* ---------- 自动播放兜底 ---------- */
+
+.vb-stage__unlock {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 999px;
+    background: rgba(16, 22, 28, 0.92);
+    color: #e8edf2;
+    font-size: 13px;
+    cursor: pointer;
+    z-index: 4;
+}
+
+.vb-stage__unlock:hover {
+    background: rgba(28, 38, 48, 0.96);
+}
+
+/* ---------- 工具栏 ---------- */
+
+.vb-stage__toolbar {
+    position: absolute;
+    right: 6px;
+    bottom: 6px;
+    display: inline-flex;
+    gap: 6px;
+    padding: 4px;
+    border-radius: 999px;
+    background: rgba(10, 14, 18, 0.72);
+    backdrop-filter: blur(4px);
+    z-index: 3;
+}
+
+.vb-stage__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.12);
+    color: #e8edf2;
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+
+.vb-stage__btn:hover {
+    background: rgba(255, 255, 255, 0.24);
+}
+
+.vb-stage__btn--hangup {
+    background: rgba(214, 69, 69, 0.85);
+}
+
+.vb-stage__btn--hangup:hover {
+    background: rgba(214, 69, 69, 1);
+}
+
+.vb-stage__btn--drag {
+    cursor: move;
+}
+
+/* audioEnabled=false（本地麦已关）时点亮 */
+.vb-stage__btn--audio.is-on {
+    background: rgba(241, 196, 15, 0.85);
+    color: #14181c;
+}
+
+.vb-stage__icon {
+    display: inline-flex;
+    pointer-events: none;
+}
+
+/* ---------- 错误条 ---------- */
+
+.vb-stage__error {
+    position: absolute;
+    left: 6px;
+    right: 6px;
+    bottom: 40px;
+    margin: 0;
+    padding: 4px 8px;
+    border-radius: 4px;
+    background: rgba(160, 32, 32, 0.88);
+    color: #fff;
+    font-size: 12px;
+    line-height: 1.5;
+    z-index: 4;
+}
+
+/* ---------- dock 模式：横向交给宿主，这里只参与流式排序（§2.9.2） ---------- */
+
+.vb-video-stage.vb-video-stage--dock {
+    position: relative;
+    left: auto;
+    top: auto;
+    width: 100%;
+    min-height: 90px;
+    border-radius: 6px;
+}
+
+.vb-stage__secondary { position:absolute;right:12px;bottom:112px;width:30%;height:26%;object-fit:cover;border-radius:8px;border:1px solid rgba(255,255,255,.6);background:#102031;z-index:2;cursor:pointer; }
+.vb-stage__secondary[hidden] { display:none; }

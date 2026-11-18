@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>晨曦企业网银 · 远程视频银行（渠道宿主示例）</title>
+    <!-- P2P 传输实现由宿主提供；视频控件只读取 globalThis.Peer，不依赖渠道源码。 -->
+    <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js" defer></script>
+    <!--
+        SDK 不在此处静态引入：channel-web-sdk 产物由 src/sdk/loader.js 运行时加载
+        （UMD script → window.VideoBanking，或 ESM 动态 import）。
+        渠道方页面自身不依赖 SDK 也能打开——SDK 缺席时业务降级为桩件提示。
+    -->
+</head>
+<body>
+    <div id="app"></div>
+    <script type="module" src="/src/main.js"></script>
+</body>
+</html>

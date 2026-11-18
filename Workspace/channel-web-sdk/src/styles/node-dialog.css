@@ -1,0 +1,180 @@
+/* 客户交易弹框：原页面上居中展示，只有内容区滚动，操作区始终在内容之后。 */
+.vb-root .vb-mobile-node-dialog {
+    --dialog-ink: #18324f;
+    --dialog-muted: #52657b;
+    --dialog-line: #d9e2ed;
+    --dialog-accent: #1764c0;
+    box-sizing: border-box;
+    align-items: center;
+    justify-content: center;
+    padding: max(16px, env(safe-area-inset-top)) 16px max(16px, env(safe-area-inset-bottom));
+    background: rgba(15, 29, 49, .48);
+    backdrop-filter: none;
+}
+.vb-root .vb-mobile-node-dialog .vb-mobile-node-sheet {
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 480px;
+    min-height: 0;
+    max-height: min(760px, 100%);
+    border-radius: 14px;
+    border: 1px solid rgba(255,255,255,.7);
+    background: #fff;
+    box-shadow: 0 20px 64px rgba(10,28,53,.24);
+    overflow: hidden;
+}
+.vb-root .vb-mobile-node-dialog .vb-mobile-node-dialog-header {
+    padding: 14px 16px;
+    background: #fff;
+    border-bottom: 1px solid var(--dialog-line);
+    text-align: left;
+}
+.vb-root .vb-mobile-node-dialog .vb-mobile-node-dialog-header strong {
+    color: var(--dialog-ink);
+    text-align: left;
+    font-size: 17px;
+    font-weight: 650;
+    line-height: 1.4;
+}
+.vb-root .vb-mobile-node-dialog .vb-mobile-node-dialog-close {
+    display:grid; place-items:center; flex:0 0 32px; width:32px; height:32px; padding:0;
+    border:0; border-radius:50%; background:transparent; color:#526b87; font-size:26px;
+    font-weight:300; line-height:1; cursor:pointer;
+}
+.vb-root .vb-mobile-node-dialog .vb-mobile-node-dialog-close:hover { background:#e7eef8; }
+.vb-root .vb-mobile-node-dialog .vb-mobile-node-dialog-close[hidden] { display:none; }
+.vb-root .vb-mobile-node-dialog .vb-mobile-node-panel {
+    flex: 1 1 auto;
+    min-height: 0;
+    width: 100%;
+}
+.vb-root .vb-mobile-node-dialog .vb-mobile-node-sheet .vb-mobile-node-form {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    min-height: 0;
+    margin: 0;
+    overflow: hidden;
+}
+.vb-root .vb-mobile-node-dialog .vb-mobile-node-sheet .vb-node-form-body {
+    box-sizing: border-box;
+    flex: 1 1 auto;
+    min-height: 0;
+    padding: 12px 16px;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    color: var(--dialog-ink);
+    font-size: 15px;
+    line-height: 1.6;
+}
+.vb-root .vb-mobile-node-dialog .vb-mobile-node-sheet .vb-node-form-footer {
+    position: static;
+    box-sizing: border-box;
+    flex: 0 0 auto;
+    padding: 10px 16px 12px;
+    background: #fff;
+    border-top: 1px solid var(--dialog-line);
+}
+.vb-root .vb-mobile-node-dialog .vb-node-primary {
+    display: block;
+    box-sizing: border-box;
+    width: 100%;
+    min-height: 44px;
+    padding: 10px 14px;
+    border: 1px solid var(--dialog-accent);
+    border-radius: 10px;
+    background: var(--dialog-accent);
+    color: #fff;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.4;
+    cursor: pointer;
+}
+.vb-root .vb-mobile-node-dialog button:active { filter: brightness(.95); }
+.vb-root .vb-mobile-node-dialog button:disabled { opacity: .5; cursor: wait; }
+.vb-root .vb-mobile-node-dialog :is(button,input,a):focus-visible { outline: 3px solid #80b6f2; outline-offset: 3px; }
+.vb-root .vb-mobile-node-dialog .vb-node-field {
+    display: grid;
+    min-height: 44px;
+    grid-template-columns: 72px minmax(0, 1fr);
+    align-items: center;
+    gap: 8px;
+    margin: 0 0 6px;
+    color: var(--dialog-ink);
+    font-size: 13px;
+    font-weight: 500;
+}
+.vb-root .vb-mobile-node-dialog .vb-node-field:last-child { margin-bottom: 0; }
+.vb-root .vb-mobile-node-dialog .vb-node-field input {
+    box-sizing: border-box;
+    width: 100%;
+    min-width: 0;
+    min-height: 38px;
+    padding: 6px 10px;
+    border: 1px solid #aebed0;
+    border-radius: 8px;
+    background: #fff;
+    color: var(--dialog-ink);
+    font-size: 16px;
+    line-height: 1.4;
+    font-weight: 400;
+}
+.vb-root .vb-mobile-node-dialog .vb-node-field input::placeholder { color: #6b7c90; }
+.vb-root .vb-mobile-node-dialog .vb-mobile-receipt-row {
+    display: grid;
+    grid-template-columns: 72px minmax(0, 1fr);
+    align-items: center;
+    gap: 8px;
+    padding: 0;
+    margin: 0 0 6px;
+    border: 0;
+}
+.vb-root .vb-mobile-node-dialog .vb-completion-receipt { padding-top:16px; }
+.vb-root .vb-mobile-node-dialog .vb-field-label { font-size: 13px; color: var(--dialog-muted); }
+.vb-root .vb-mobile-node-dialog .vb-field-readonly {
+    box-sizing: border-box;
+    min-height: 36px;
+    padding: 6px 10px;
+    border: 1px solid var(--dialog-line);
+    border-radius: 8px;
+    background: #f5f8fc;
+    font-size: 15px;
+    overflow-wrap: anywhere;
+}
+.vb-root .vb-mobile-node-dialog .vb-document-link {
+    min-height: 32px;
+    margin: 0;
+    align-items: center;
+    color: #155caf;
+    font-size: 15px;
+    font-weight: 500;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+.vb-root .vb-mobile-node-dialog .vb-signature-heading { display:flex; align-items:center; justify-content:space-between; gap:8px; margin: 8px 0 6px; }
+.vb-root .vb-mobile-node-dialog .vb-signature-label { margin:0; color:var(--dialog-ink); font-size:15px; font-weight:600; }
+.vb-root .vb-mobile-node-dialog .vb-signature-reset { min-height:44px; padding:8px 12px; border:1px solid var(--dialog-line); border-radius:8px; background:#fff; color:var(--dialog-muted); font-size:14px; cursor:pointer; }
+.vb-root .vb-mobile-node-dialog .vb-signature-pad { position:relative; border:1px solid #aebed0; border-radius:10px; overflow:hidden; background:#fff; }
+.vb-root .vb-mobile-node-dialog .vb-signature-form canvas { display:block; box-sizing:border-box; width:100%; height:clamp(140px, 20dvh, 176px); min-height:140px; border:0; border-radius:0; margin:0; touch-action:none; }
+.vb-root .vb-mobile-node-dialog .vb-signature-placeholder { position:absolute; inset:0; display:grid; place-items:center; color:#64748b; font-size:15px; pointer-events:none; }
+.vb-root .vb-mobile-node-dialog .vb-signature-placeholder[hidden] { display:none; }
+.vb-root .vb-mobile-node-dialog .vb-signature-hint { margin:8px 0; color:var(--dialog-muted); font-size:13px; }
+.vb-root .vb-mobile-node-dialog .vb-node-checkbox { box-sizing:border-box; display:flex; align-items:flex-start; gap:8px; padding:6px 0; min-height:44px; margin:0; color:var(--dialog-ink); font-size:14px; line-height:1.6; }
+.vb-root .vb-mobile-node-dialog .vb-node-checkbox input { flex:0 0 20px; width:20px; height:20px; min-height:20px; padding:0; margin:2px 0 0; accent-color:var(--dialog-accent); }
+.vb-root .vb-mobile-node-dialog .vb-node-form-note { margin:0 0 10px; color:var(--dialog-muted); font-size:12px; line-height:1.6; }
+.vb-root .vb-mobile-node-dialog .vb-node-form-error { margin:10px 0 0; font-size:13px; line-height:1.5; color:#b42318; }
+.vb-root .vb-mobile-node-dialog .vb-node-form-error:empty { display:none; }
+.vb-root .vb-mobile-node-dialog .vb-password-help { margin:0 0 10px; color:var(--dialog-muted); font-size:14px; }
+.vb-root .vb-mobile-node-dialog .vb-password-cards { gap:8px; margin-bottom:12px; }
+.vb-root .vb-mobile-node-dialog .vb-password-card { box-sizing:border-box; min-height:60px; padding:10px; background:#f7f9fc; border:1px solid var(--dialog-line); box-shadow:none; }
+.vb-root .vb-mobile-node-dialog .vb-password-card:has(input:checked) { background:#edf5ff; border-color:var(--dialog-accent); box-shadow:none; }
+.vb-root .vb-mobile-node-dialog .vb-password-card strong { font-size:15px; color:var(--dialog-ink); }
+.vb-root .vb-mobile-node-dialog .vb-password-card small { margin-top:4px; color:var(--dialog-muted); font-size:13px; }
+.vb-root .vb-mobile-node-dialog .vb-password-photo { padding:10px; margin:0 0 10px; border-color:var(--dialog-line); }
+.vb-root .vb-mobile-node-dialog .vb-photo-button { box-sizing:border-box; min-height:48px; border-color:#aebed0; border-radius:8px; background:#f5f8fc; color:#155caf; font-size:14px; }
+@media (max-width:360px), (max-height:500px) {
+    .vb-root .vb-mobile-node-dialog { padding:12px; }
+    .vb-root .vb-mobile-node-dialog .vb-mobile-node-dialog-header { padding:14px 16px; }
+    .vb-root .vb-mobile-node-dialog .vb-mobile-node-sheet .vb-node-form-body { padding:16px; }
+    .vb-root .vb-mobile-node-dialog .vb-mobile-node-sheet .vb-node-form-footer { padding:12px 16px; }
+}

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:flowable="http://flowable.org/bpmn" targetNamespace="Bank">
+  <process id="balance_sop" name="账户余额查询" isExecutable="true">
+    <startEvent id="start"/>
+    <receiveTask id="ai_auth" name="数字人身份核实">
+      <extensionElements>
+        <flowable:field name="actors" stringValue="CUSTOMER,AGENT"/>
+        <flowable:field name="actionCode" stringValue="SUBMIT"/>
+      </extensionElements>
+    </receiveTask>
+    <serviceTask id="identity_verify" name="身份核验" flowable:delegateExpression="${apiTaskDelegate}"><extensionElements><flowable:capability code="identity.verify.v1" inputs="customerName=customer_name,certNo=customer_cert_masked" outputs="authPassed=pass" phase="execute" readOnly="true"/></extensionElements></serviceTask>
+    <exclusiveGateway id="auth_gateway" name="核验分流" default="auth_human"/>
+    <serviceTask id="human_queue" name="转人工排队路由" flowable:delegateExpression="${nodeTransitionDelegate}"><extensionElements>
+      <flowable:transition releaseAgent="false" closeRoom="false"/>
+    </extensionElements></serviceTask>
+    <userTask id="human_auth" name="座席视频核实身份">
+      <extensionElements>
+        <flowable:handling handler="HUMAN" submitter="AGENT" assignment="NEW" skillGroup="GENERAL" retainAgent="false" communication="VIDEO"/>
+        <flowable:field name="actors" stringValue="AGENT"/>
+        <flowable:field name="actionCode" stringValue="AUTHORIZE"/>
+      </extensionElements>
+    </userTask>
+    <serviceTask id="check_balance_api" name="核心系统查余额" flowable:delegateExpression="${apiTaskDelegate}"><extensionElements><flowable:capability code="core.balance.v1" inputs="accountNo=account_no" outputs="balanceResult=formattedBalance,business_success=_succeeded" phase="execute" readOnly="true"/></extensionElements></serviceTask>
+    <receiveTask id="ai_broadcast" name="数字人播报结果">
+      <extensionElements>
+        <flowable:field name="actors" stringValue="AGENT,CUSTOMER"/>
+        <flowable:field name="actionCode" stringValue="COMPLETE"/>
+      </extensionElements>
+    </receiveTask>
+    <endEvent id="end"/>
+    <sequenceFlow id="start_auth" sourceRef="start" targetRef="ai_auth"></sequenceFlow>
+    <sequenceFlow id="auth_verify" sourceRef="ai_auth" targetRef="identity_verify"></sequenceFlow>
+    <sequenceFlow id="verify_gateway" sourceRef="identity_verify" targetRef="auth_gateway"></sequenceFlow>
+    <sequenceFlow id="auth_pass" sourceRef="auth_gateway" targetRef="check_balance_api"><conditionExpression xsi:type="tFormalExpression"><![CDATA[${flowData.value(execution, 'authPassed') == true}]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="auth_human" sourceRef="auth_gateway" targetRef="human_queue"></sequenceFlow>
+    <sequenceFlow id="queue_auth" sourceRef="human_queue" targetRef="human_auth"></sequenceFlow>
+    <sequenceFlow id="human_query" sourceRef="human_auth" targetRef="check_balance_api"></sequenceFlow>
+    <sequenceFlow id="query_broadcast" sourceRef="check_balance_api" targetRef="ai_broadcast"></sequenceFlow>
+    <sequenceFlow id="broadcast_end" sourceRef="ai_broadcast" targetRef="end"></sequenceFlow>
+  </process>
+</definitions>

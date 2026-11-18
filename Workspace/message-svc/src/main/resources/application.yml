@@ -1,0 +1,32 @@
+server:
+  port: 8085
+  error:
+    include-message: always
+
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/bank_message?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true&createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: test_user
+    password: Root@0258
+
+message:
+  signaling-base-url: ${SIGNALING_BASE_URL:http://localhost:8082}
+  websocket-endpoint: /ws
+  ws-url: ${MESSAGE_WS_URL:ws://localhost:8085/ws}
+  token-secret: ${MESSAGE_TOKEN_SECRET:local-message-secret-change-in-production}
+  token-ttl-seconds: 3600
+  # 客户侧 STOMP 通道（/ws）只被渠道端 SDK 使用，其实际地址是 enterprise-demo 的
+  # 5175（HTTPS 开发证书）。原先只允许 5173 —— 那是已删除的 navis-web 旧端口 ——
+  # 导致真实客户来源的 /ws 握手一律 403，SDK 静默降级为 3s 轮询、
+  # 收不到实时节点推送（表现为坐席授权后客户侧签名弹框不出现）。
+  # 这里只列当前实际会用到的前端来源；正式部署用 MESSAGE_ALLOWED_ORIGINS 覆盖为真实域名。
+  allowed-origin-patterns: ${MESSAGE_ALLOWED_ORIGINS:https://localhost:5175,http://localhost:5175,https://localhost:5174,http://localhost:5174}
+  presence:
+    business-base-url: ${BUSINESS_BASE_URL:http://localhost:8080}
+    connect-timeout-ms: 1000
+    read-timeout-ms: 2000
+
+logging:
+  level:
+    com.example.bank.message: INFO

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.example.bank</groupId>
+        <artifactId>bank-platform</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+    <artifactId>workflow-svc</artifactId>
+    <name>workflow-svc</name>
+
+    <!-- 流程引擎服务：唯一持有 Flowable 与 BPMN 资源的一方。 -->
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.flowable</groupId>
+            <artifactId>flowable-spring-boot-starter-process</artifactId>
+            <version>${flowable.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jdbc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.33</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency><groupId>com.h2database</groupId><artifactId>h2</artifactId><version>1.4.200</version><scope>test</scope></dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <!--
+                      BPMN 的 XSD 校验按 URL 解析相对 import：BpmnXMLConverter.createSchema() 会取
+                      org/flowable/impl/bpmn/parser/BPMN20.xsd 的 URL，交给 Xerces 去 import 同目录的 Semantic.xsd。
+                      该 XSD 打包在 flowable-bpmn-converter 里，而可执行 jar 中它是嵌套 jar，
+                      URL 形如 jar:file:app.jar!/BOOT-INF/lib/xxx.jar!/...，Xerces 读不了，
+                      于是报「src-resolve: 无法将名称 'extension' 解析为 'element declaration'」并中止启动。
+                      解包成真实目录后 URL 变成 file:，相对 import 恢复可解析；校验本身保持开启。
+                    -->
+                    <requiresUnpack>
+                        <dependency>
+                            <groupId>org.flowable</groupId>
+                            <artifactId>flowable-bpmn-converter</artifactId>
+                        </dependency>
+                    </requiresUnpack>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

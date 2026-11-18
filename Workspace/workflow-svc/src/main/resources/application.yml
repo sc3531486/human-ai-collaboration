@@ -1,0 +1,29 @@
+server:
+  port: 8083
+  error:
+    # 调用方（业务逻辑服务）要把这里的 4xx 提示原样透传给页面 ——
+    # 「当前不在收款确认节点，或已提交过」这类判断只有本服务知道，
+    # 不透传的话页面只剩一句无信息量的"冲突"。
+    include-message: always
+
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/bank_workflow?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true&createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: test_user
+    password: Root@0258
+
+flowable:
+  check-process-definitions: true
+  database-schema-update: true
+  async-executor-activate: false
+  process:
+    enable-extra-xml-validation: false
+
+# 流程节点的出站依赖只保留 business：排队、开房、存证、播报、通知都经业务中枢编排。
+workflow:
+  business-base-url: ${BUSINESS_BASE_URL:http://127.0.0.1:8090}
+
+logging:
+  level:
+    com.example.bank.workflow: INFO

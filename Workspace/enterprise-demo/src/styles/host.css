@@ -1,0 +1,163 @@
+/* 渠道宿主（企业网银）自有页面样式：只管宿主自身布局，SDK 容器内样式由 SDK 负责。 */
+* { box-sizing: border-box; }
+
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    background: #f1f5f9;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    color: #0f172a;
+}
+
+#app { height: 100%; }
+
+.host-shell {
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.host-header {
+    background: #0f172a;
+    color: #f8fafc;
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.host-brand { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 16px; }
+.host-brand .logo {
+    width: 28px; height: 28px; border-radius: 6px;
+    background: linear-gradient(135deg, #2563eb, #38bdf8);
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 14px; color: #fff;
+}
+.host-brand small { display: block; font-weight: 400; font-size: 11px; color: #94a3b8; }
+
+.host-nav { display: flex; gap: 6px; }
+.host-nav button {
+    background: transparent; border: 1px solid transparent; color: #cbd5e1;
+    padding: 7px 14px; border-radius: 7px; cursor: pointer; font-size: 13.5px;
+}
+.host-nav button:hover { background: #1e293b; color: #fff; }
+.host-nav button.active { background: #2563eb; color: #fff; }
+
+.host-user { font-size: 12.5px; color: #94a3b8; }
+
+.host-main { flex: 1; padding: 22px 24px 36px; max-width: 1180px; width: 100%; margin: 0 auto; }
+.sdk-page { flex: 1; min-height: 0; }
+.host-shell-bank { height:100vh; height:100dvh; min-height:0; overflow:hidden; }
+.host-shell-bank .sdk-page { display:flex; flex-direction:column; overflow:hidden; }
+.host-shell-bank .sdk-page-root { display:flex; flex:1 1 0; min-height:0; width:100%; }
+.host-shell-bank .sdk-container { display:flex; flex:1 1 0; min-height:0; width:100%; }
+
+.host-card {
+    background: #fff; border: 1px solid #e2e8f0; border-radius: 12px;
+    padding: 20px 22px; margin-bottom: 18px;
+}
+.host-card h2 { margin: 0 0 6px; font-size: 17px; }
+.host-card h3 { margin: 18px 0 8px; font-size: 14.5px; }
+.host-card p { margin: 6px 0; font-size: 13.5px; color: #475569; line-height: 1.7; }
+.host-card code { background: #f1f5f9; padding: 1px 6px; border-radius: 4px; font-size: 12.5px; }
+
+.host-kv { display: grid; grid-template-columns: 130px 1fr; gap: 6px 12px; font-size: 13.5px; }
+.host-kv dt { color: #64748b; }
+.host-kv dd { margin: 0; color: #0f172a; word-break: break-all; }
+
+/* SDK 挂载容器：渠道方决定它出现在哪、多大——SDK 不拥有页面（§6.1）。 */
+.sdk-frame {
+    border: 2px dashed #94a3b8;
+    border-radius: 12px;
+    background: #f8fafc;
+    padding: 14px;
+    min-height: 360px;
+}
+.sdk-frame .frame-label {
+    font-size: 12px; color: #64748b; margin-bottom: 10px;
+    display: flex; justify-content: space-between; align-items: center; gap: 10px;
+}
+.sdk-frame .frame-label strong { color: #334155; }
+
+/* 能力矩阵 */
+.cap-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.cap-table th, .cap-table td { border: 1px solid #e2e8f0; padding: 8px 10px; text-align: left; }
+.cap-table th { background: #f8fafc; font-weight: 600; color: #334155; }
+.cap-table td.switch-cell { width: 90px; text-align: center; }
+
+.switch { position: relative; display: inline-block; width: 38px; height: 21px; vertical-align: middle; }
+.switch input { opacity: 0; width: 0; height: 0; }
+.switch .slider {
+    position: absolute; cursor: pointer; inset: 0;
+    background: #cbd5e1; border-radius: 21px; transition: .2s;
+}
+.switch .slider::before {
+    content: ''; position: absolute; height: 15px; width: 15px; left: 3px; top: 3px;
+    background: #fff; border-radius: 50%; transition: .2s;
+}
+.switch input:checked + .slider { background: #2563eb; }
+.switch input:checked + .slider::before { transform: translateX(17px); }
+
+/* 调用日志 */
+.log-list { list-style: none; margin: 0; padding: 0; max-height: 300px; overflow: auto; font-size: 12.5px; }
+.log-list li {
+    display: flex; gap: 10px; align-items: baseline;
+    padding: 6px 8px; border-bottom: 1px dashed #e2e8f0;
+}
+.log-list .t { color: #94a3b8; min-width: 74px; }
+.log-list .d { font-weight: 600; color: #334155; min-width: 90px; }
+.log-list .m { color: #0f172a; min-width: 110px; }
+.log-path {
+    font-size: 11px; border-radius: 999px; padding: 0 8px; line-height: 18px; white-space: nowrap;
+}
+.log-path.native { background: #dcfce7; color: #166534; }
+.log-path.browser { background: #fef9c3; color: #854d0e; }
+.log-list .detail { color: #64748b; }
+
+.badge { font-size: 11px; border-radius: 999px; padding: 2px 9px; border: 1px solid; }
+.badge.mock { background: #fef3c7; color: #92400e; border-color: #fcd34d; }
+.badge.real { background: #dcfce7; color: #166534; border-color: #86efac; }
+
+.btn {
+    font-size: 13px; padding: 7px 14px; border-radius: 7px;
+    border: 1px solid #2563eb; background: #2563eb; color: #fff; cursor: pointer;
+}
+.btn.secondary { background: #fff; color: #2563eb; }
+.btn:disabled { opacity: .5; cursor: not-allowed; }
+
+.notice {
+    background: #eff6ff; border: 1px solid #bfdbfe; color: #1e40af;
+    border-radius: 8px; padding: 10px 14px; font-size: 13px; line-height: 1.7;
+    margin-bottom: 16px;
+}
+
+.host-footer {
+    padding: 14px 24px; font-size: 12px; color: #94a3b8;
+    border-top: 1px solid #e2e8f0; background: #fff;
+}
+
+.bank-welcome { display:flex; justify-content:space-between; align-items:center; padding:28px 32px; color:#fff; border-radius:14px; background:linear-gradient(115deg,#0b3c7a,#1d67b9 65%,#48a9dc); margin-bottom:18px; }
+.bank-welcome .eyebrow { margin:0 0 6px; color:#b9dbff; font-size:13px; }
+.bank-welcome h1 { margin:0 0 8px; font-size:26px; }
+.bank-welcome p { margin:0; color:#d9ecff; font-size:14px; }
+.login-meta { padding:10px 0 10px 25px; border-left:1px solid #8bc2ed; color:#d9ecff; font-size:12.5px; line-height:1.8; }
+.account-overview { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-bottom:18px; }
+.account-overview article { padding:20px; border-radius:12px; border:1px solid #dbe7f5; background:#fff; }
+.account-overview span,.account-overview small { display:block; color:#64748b; font-size:13px; }
+.account-overview strong { display:block; margin:9px 0; color:#173f71; font-size:22px; }
+.bank-section { margin:22px 0; }
+.section-title { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
+.section-title h2 { margin:0; color:#1e3e68; font-size:18px; }
+.section-title button { border:0; background:transparent; color:#2666b5; cursor:pointer; }
+.service-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; }
+.service-item { position:relative; min-height:140px; text-align:left; padding:18px; cursor:pointer; border:1px solid #dde7f2; border-radius:12px; background:#fff; transition:.18s ease; }
+.service-item:hover { border-color:#5e99d7; transform:translateY(-2px); box-shadow:0 8px 18px #1f5f9e18; }
+.service-item b { display:grid; place-items:center; width:34px; height:34px; margin-bottom:14px; border-radius:9px; background:#e8f2ff; color:#1d65b4; }
+.service-item span,.service-item small { display:block; }.service-item span { color:#183d6d; font-weight:700; }.service-item small { margin-top:7px; color:#8091a9; font-size:12px; }
+.service-item.featured { border-color:#2e84d5; background:linear-gradient(145deg,#f4faff,#e5f4ff); }.service-item.featured em { position:absolute; right:15px; top:19px; color:#1571c8; font-style:normal; font-size:12px; }
+.split-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }.split-grid .host-card { margin:0; }
+.sdk-page-root,.sdk-container { min-height:100%; height:100%; }.sdk-page-root { position:relative; }.sdk-load-error { max-width:420px; margin:120px auto; padding:28px; text-align:center; border-radius:12px; background:#fff; box-shadow:0 8px 28px #0f172a1a; }.sdk-load-error p { color:#b91c1c; font-size:13px; }
+@media (max-width:760px) { .account-overview,.service-grid,.split-grid { grid-template-columns:1fr 1fr; }.bank-welcome{align-items:flex-start;gap:18px;flex-direction:column}.login-meta{border-left:0;padding:0}.host-main{padding:14px}.service-item{min-height:124px} }

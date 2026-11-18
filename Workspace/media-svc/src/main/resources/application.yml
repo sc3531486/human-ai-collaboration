@@ -1,0 +1,25 @@
+server:
+  port: 8084
+  error:
+    # 调用方（路由服务 / 流程服务）要把这里的 4xx 提示原样透传给页面。
+    # Spring Boot 默认不在错误体里带 message，on_param 又要求调用方每次加参数，故固定 always。
+    include-message: always
+
+# 多媒体服务：第三方音视频平台对接 + 房间/用户/参与者/录制会话/视频流水登记。
+# 媒体面是 PeerJS P2P（本地档位）或第三方平台，不经本服务转发。
+media:
+  business-base-url: ${BUSINESS_BASE_URL:http://127.0.0.1:8090}
+  signaling-base-url: ${SIGNALING_BASE_URL:http://localhost:8082}
+  # 平台编码：本地档位 PEERJS；生产可换 AGORA/TENCENT/ZEGO，由适配器解释。
+  platform-code: ${MEDIA_PLATFORM_CODE:PEERJS}
+
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/bank_media?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true&createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: test_user
+    password: Root@0258
+
+logging:
+  level:
+    com.example.bank.media: INFO

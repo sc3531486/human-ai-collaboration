@@ -1,0 +1,30 @@
+server:
+  port: 8081
+  error:
+    # 调用方（业务逻辑服务）要把这里的 4xx 提示原样透传给页面。
+    # Spring Boot 默认不在错误体里带 message，on_param 又要求调用方每次加参数，故固定 always。
+    include-message: always
+
+# 坐席状态变更记录落库（绩效取数/审计）；工单与资源在线态当前仍以内存为准，
+# 重启后由签入事件重建。后续阶段再把工单/资源全量持久化。
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/bank_routing?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true&createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: test_user
+    password: Root@0258
+
+# 出站依赖：路由只"决定"派给谁，具体通知与开房分别委托给信令与多媒体服务。
+# 出站地址可经环境变量覆盖，便于拆分部署时改指向。
+routing:
+  signaling-base-url: ${SIGNALING_BASE_URL:http://localhost:8082}
+  # 资源目录、接待动作和会话上下文统一由业务中枢提供。
+  business-base-url: ${ROUTING_BUSINESS_BASE_URL:http://127.0.0.1:8090}
+  # 振铃超时：坐席未接听则回收工单并重新派单，避免客户无限等待。
+  ring-timeout-ms: 30000
+  # 资源心跳停滞判定阈值：超过该时长未上报即视为掉线（配合信令的连接事件兜底）。
+  heartbeat-timeout-ms: 45000
+
+logging:
+  level:
+    com.example.bank.routing: INFO

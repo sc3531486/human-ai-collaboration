@@ -1,0 +1,44 @@
+server:
+  port: 8082
+  error:
+    # 调用方（业务逻辑服务）要把这里的 4xx 提示原样透传给页面。
+    # Spring Boot 默认不在错误体里带 message，on_param 又要求调用方每次加参数，故固定 always。
+    include-message: always
+
+# 连接/presence/事件事实落库；在线态仍以 Centrifugo presence 为准。
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/bank_signaling?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true&createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: test_user
+    password: Root@0258
+
+# 信令服务：Centrifugo 的唯一持有方。publish 下行、presence 查询、
+# 订阅令牌签发都收敛在这里，其他服务不直接接触 Centrifugo。
+centrifugo:
+  api-url: ${CENTRIFUGO_API_URL:http://localhost:8000}
+  api-key: ${CENTRIFUGO_API_KEY:bank-poc-centrifugo-api-key-2026}
+  token-secret: ${CENTRIFUGO_TOKEN_SECRET:bank-poc-centrifugo-hmac-secret-2026}
+  ws-url: ${CENTRIFUGO_WS_URL:ws://localhost:8000/connection/websocket}
+  token-ttl-seconds: 3600
+  # 出站超时必须显式配置：Centrifugo 不可用时不能让扫描线程被拖住（默认是无超时）。
+  connect-timeout-ms: 1000
+  read-timeout-ms: 2000
+
+# 连接层事件的消费者：检测到坐席连接消失后，把 AGENT_DISCONNECTED 抛给业务逻辑服务登记。
+# 信令只回答"这条连接还在不在"，不理解这个坐席是小休还是办理中 —— 那是业务侧的判断。
+presence:
+  business-base-url: ${BUSINESS_BASE_URL:http://localhost:8080}
+  # Centrifugo v6 不发 disconnect 事件，只能靠 presence 轮询反查；节拍与路由的扫描对齐。
+  sweep-interval-ms: 5000
+  # 签入宽限期：令牌签发到 Centrifugo 完成订阅之间存在窗口，此期间不参与判定。
+  subscribe-grace-ms: 15000
+  # 上报掉线事件的出站超时，必须短于扫描节拍，避免上一次扫描未结束下一次就到期。
+  connect-timeout-ms: 1000
+  read-timeout-ms: 2000
+  # 在线 PRESENCE_CHANGED 事件的节流窗口：避免每个扫描周期都写一条事件。
+  event-throttle-ms: 60000
+
+logging:
+  level:
+    com.example.bank.signaling: INFO

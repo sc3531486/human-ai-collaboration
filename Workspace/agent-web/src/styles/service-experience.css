@@ -1,0 +1,24 @@
+/* 本轮统一交互密度：节点要素、业务资料、服务小结保持同一银行工作台布局。 */
+.vb-topbar{background:#fff;border-bottom:1px solid #dce6ef;color:#173b63}
+.vb-body{grid-template-columns:clamp(220px,17vw,285px) minmax(0,1fr) clamp(245px,20vw,330px);align-items:stretch}
+.vb-stage,.vb-side,.vb-side-group{min-height:0}
+.vb-agent-org{line-height:1.6;padding:0 8px}
+.vb-assist-pane .vb-chat-log{flex:1;min-height:0;overflow:auto}
+.vb-chat-input input:disabled{background:#f4f7fa}
+.vb-chat-input button:disabled{opacity:.45;cursor:not-allowed}
+.service-summary-dialog{max-height:90dvh;margin-top:5dvh!important;display:flex;flex-direction:column}
+.service-summary-dialog .el-dialog__header{flex-shrink:0;padding:18px 24px 14px;border-bottom:1px solid #e1e9f0}
+.service-summary-dialog .el-dialog__body{overflow:auto;min-height:0;padding:18px 24px}
+.service-summary-dialog .el-dialog__footer{border-top:1px solid #e1e9f0;padding:14px 24px;flex-shrink:0}
+.service-summary-profile{gap:10px 18px}
+.service-summary-profile>div{display:grid;grid-template-columns:88px minmax(0,1fr);align-items:center;gap:8px;min-height:44px;padding:9px 12px;border-radius:6px}
+.service-summary-profile b{margin:0;white-space:normal;overflow-wrap:anywhere;line-height:1.5}
+.service-summary-section{margin-top:18px}
+.service-summary-tags .el-check-tag{font-size:13px;border-radius:6px}
+.history-image-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.history-image-grid figure{margin:0;border:1px solid #dce6ef;border-radius:8px;padding:12px;display:flex;flex-direction:column;justify-content:center;align-items:center;min-height:160px;background:#f8fafc}
+.history-image-grid img{width:100%;height:200px;object-fit:contain}
+.history-image-grid figcaption{margin-top:10px;font-size:13px;color:#526b84}
+@media(max-width:1100px){.vb-body{grid-template-columns:220px minmax(0,1fr)}.vb-side{grid-column:1/-1;height:auto;min-height:240px}.service-summary-profile{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:760px){.vb-body{grid-template-columns:minmax(0,1fr)}.service-summary-profile{grid-template-columns:1fr}.history-image-grid{grid-template-columns:1fr}.service-summary-dialog .el-dialog__body{padding:14px}}
+@media(prefers-reduced-motion:reduce){.service-summary-dialog{transition:none}}

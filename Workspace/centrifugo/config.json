@@ -1,0 +1,16 @@
+{
+  "http_server": { "port": 8000 },
+  "client": {
+    "token": { "hmac_secret_key": "bank-poc-centrifugo-hmac-secret-2026" },
+    "allowed_origins": ["*"]
+  },
+  "http_api": { "key": "bank-poc-centrifugo-api-key-2026" },
+  "channel": {
+    "namespaces": [
+      { "name": "agent", "presence": true, "allow_subscribe_for_client": true },
+      { "name": "customer", "presence": false, "allow_subscribe_for_client": true }
+    ]
+  },
+  "health": { "enabled": true },
+  "log": { "level": "info" }
+}

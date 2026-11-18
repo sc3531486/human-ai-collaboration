@@ -1,0 +1,116 @@
+{
+  "risk.evaluate.v1": {
+    "path": "/api/mock/risk/evaluate",
+    "required": [
+      "amount"
+    ]
+  },
+  "core.transfer.v1": {
+    "path": "/api/mock/core/transfer",
+    "required": [
+      "bizNo",
+      "processId",
+      "amount",
+      "payeeName",
+      "payeeAccount",
+      "signatureDocumentId"
+    ],
+    "expected": {
+      "status": "SUCCESS"
+    }
+  },
+  "core.balance.v1": {
+    "path": "/api/mock/core/balance/query",
+    "required": []
+  },
+  "notification.send.v1": {
+    "path": "/api/mock/notify/sms/send",
+    "required": [
+      "bizNo",
+      "amount",
+      "payeeName"
+    ]
+  },
+  "identity.verify.v1": {
+    "path": "/api/mock/id/face-verify",
+    "required": [
+      "customerName",
+      "certNo"
+    ],
+    "acceptedCodes": [
+      "000000",
+      "200003"
+    ]
+  },
+  "transfer.signature.v1": {
+    "path": "/internal/documents/signature",
+    "required": [
+      "bizNo",
+      "processId",
+      "amount",
+      "payeeName",
+      "payeeAccount",
+      "signatureImage"
+    ]
+  },
+  "transfer.receipt.v1": {
+    "path": "/internal/documents/receipt",
+    "required": [
+      "bizNo",
+      "processId",
+      "amount",
+      "payeeName",
+      "payeeAccount",
+      "signatureDocumentId",
+      "coreTxId"
+    ]
+  },
+  "password.cards.v1": {
+    "path": "/api/mock/password/cards",
+    "required": [
+      "customerId"
+    ]
+  },
+  "password.media.v1": {
+    "path": "/api/mock/password/media-ocr",
+    "required": [
+      "customerId",
+      "cardId",
+      "mediaPhoto"
+    ]
+  },
+  "password.identity.v1": {
+    "path": "/api/mock/password/identity",
+    "required": [
+      "customerId",
+      "cardId",
+      "idFrontPhoto",
+      "idBackPhoto",
+      "facePhoto"
+    ],
+    "acceptedCodes": [
+      "000000"
+    ]
+  },
+  "password.customer-identity.v1": {
+    "path": "/api/mock/password/identity",
+    "required": ["customerId", "cardId", "mediaPhoto", "idFrontPhoto", "idBackPhoto", "customerFacePhoto"]
+  },
+  "password.review.v1": {"path":"/api/mock/password/review","required":["identityAuditId","action"]},
+  "sms.send.v1": {"path":"/api/mock/sms/send","required":["customerId","cardId"]},
+  "sms.verify.v1": {"path":"/api/mock/sms/verify","required":["customerId","cardId","challengeId","code"]},
+  "password.form.v1": {"path":"/api/mock/password/form","required":["customerId","cardId","identityAuditId","smsVerificationId"]},
+  "password.signature.v1": {"path":"/api/mock/password/signature","required":["serviceFormId","signatureImage","agentId","confirmed"]},
+  "password.receipt.v1": {"path":"/api/mock/password/receipt","required":["signatureDocumentId","resetReceipt","resetStatus","customerId","cardId","identityAuditId","smsVerificationId"]},
+  "authorization.create.v1": {"path":"/api/mock/authorization/create","required":["reason"]},
+  "authorization.load.v1": {"path":"/api/mock/authorization/load","required":["authorizationId"]},
+  "authorization.decide.v1": {"path":"/api/mock/authorization/decide","required":["authorizationId","agentId","decision"]},
+  "password.reset.v1": {
+    "path": "/api/mock/password/reset",
+    "required": [
+      "customerId",
+      "cardId",
+      "identityAuditId","smsVerificationId","signatureDocumentId"
+    ]
+  }
+}

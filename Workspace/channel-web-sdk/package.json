@@ -1,0 +1,27 @@
+{
+  "name": "vb-banking",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "数智化远程视频银行 · 渠道方集成 SDK（零 TypeScript、零框架：ESM + UMD + 隔离样式，ES2018+）",
+  "main": "dist/vb-banking.umd.js",
+  "module": "dist/vb-banking.esm.js",
+  "style": "dist/vb-banking.css",
+  "files": [
+    "dist",
+    "README.md",
+    "SCENARIO_GUIDE.md"
+  ],
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "css": "node scripts/build-css.mjs",
+    "check": "node scripts/check.mjs",
+    "test": "node --test \"tests/**/*.test.mjs\""
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "vite": "^5.4.11"
+  }
+}

@@ -1,0 +1,64 @@
+/* 坐席工作台布局：按可用窗口分配三栏高度，内容区域独立滚动。 */
+.vb-shell{height:100dvh;min-height:0;overflow:hidden}
+.vb-body{flex:1;min-height:0;overflow:hidden;grid-template-columns:clamp(220px,17vw,285px) minmax(0,1fr) clamp(245px,20vw,330px);align-items:stretch;gap:10px;padding:10px}
+.vb-agentbar,.vb-applicant{min-height:0;height:100%;overflow-y:auto;border:1px solid var(--border);border-radius:8px}
+.vb-agentbar{padding:12px;gap:12px}
+.vb-stage{min-height:0;height:100%;overflow:hidden}
+.vb-tabs{height:40px;padding:0 12px;margin-bottom:10px;border-radius:8px;gap:16px}
+.vb-stage-body{min-height:0;flex:1;padding:0;gap:10px;overflow:hidden}
+#home-view,#business-view{flex:1;min-height:0;gap:10px;overflow:hidden}
+#business-view .vb-process,#business-view .vb-process-alert{flex-shrink:0}
+#business-view .vb-node{flex:1;min-height:0;overflow:auto;background:#fff;border:1px solid var(--border);border-radius:8px;padding:16px}
+#business-view .node-page{padding:0;border:0}
+#business-view .node-page-heading{margin-bottom:14px}
+#business-view .node-page-heading h2{font-size:20px}
+#business-view .node-page-heading p{margin-top:6px}
+#business-view .form-grid{gap:12px 18px}
+#business-view .photo-frame,#business-view .node-photo-stage{min-height:180px;height:clamp(180px,30vh,320px)}
+#business-view .capture-workbench{margin:0}
+#business-view .node-actions{gap:10px;margin-top:16px}
+.vb-side{grid-column:auto;grid-row:auto;min-height:0;height:100%;overflow:hidden;padding:0;border:0;background:transparent;flex-direction:column;gap:10px}
+.vb-side-group{flex:1;min-width:0;min-height:0;gap:10px}
+.vb-side .vb-card{background:#fff;border-radius:8px;box-shadow:none;flex-shrink:0}
+#business-side>.vb-card:first-child{flex:0 0 auto}
+#business-side .vb-video-stage{aspect-ratio:4/3;height:auto}
+#business-side .vb-assist{flex:1;min-height:0;display:flex;flex-direction:column}
+#business-side .vb-assist-pane{flex:1;min-height:0;display:flex;flex-direction:column}
+#business-side .vb-chat-log{flex:1;max-height:none;min-height:0;overflow:auto}
+#business-side .vb-chat-input{flex-shrink:0}
+#home-side>.vb-card:last-child{flex:1;min-height:0;display:flex;flex-direction:column}
+#home-side .vb-notice-list{flex:1;max-height:none;min-height:0;overflow:auto}
+#home-view>.vb-block:first-child{flex:0 0 auto}
+#home-view>.vb-block:last-child{flex:1;min-height:0;display:flex;flex-direction:column}
+#home-view .vb-table-scroll{flex:1;min-height:0;overflow:auto}
+#home-view .vb-table th{position:sticky;top:0;background:#f2f6fc;z-index:1}
+#home-view .vb-pager{flex-shrink:0}
+.vb-trade-grid{grid-template-columns:repeat(2,minmax(0,1fr));padding:12px;gap:10px}
+.vb-process{padding:12px}
+.vb-body .inline-node-history{flex:1;min-height:0;overflow:auto;background:#fff;border:1px solid var(--border);border-radius:8px;padding:16px}
+.vb-body .inline-node-history[hidden]{display:none}
+.inline-history-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-bottom:12px;margin-bottom:16px;border-bottom:1px solid var(--border)}
+.inline-history-heading h2{margin:0;font-size:18px;color:var(--ink,#173b6d)}
+.inline-history-heading p{margin:4px 0 0;color:#70819a;font-size:13px}
+.inline-history-heading button{flex:0 0 auto;padding:7px 12px;color:#1467c7;background:#fff;border:1px solid #a9ccec;border-radius:5px;cursor:pointer}
+@media(min-width:1600px){.vb-trade-grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(min-width:900px) and (max-width:1100px){.vb-body{grid-template-columns:200px minmax(0,1fr) 225px;gap:8px;padding:8px}.vb-agentbar{padding:10px}}
+@media(max-width:899px){.vb-shell{height:auto;min-height:100dvh;overflow:visible}.vb-body{display:grid;grid-template-columns:190px minmax(0,1fr);overflow:visible}.vb-stage{height:auto;min-height:calc(100dvh - 80px)}.vb-agentbar,.vb-applicant{height:auto}.vb-side{grid-column:1/-1;min-height:320px;height:auto}.vb-side-group{min-width:0}#home-view,#business-view{overflow:visible}#business-view .vb-node{overflow:visible}.vb-stage-body{overflow:visible}.vb-side{overflow:visible}}
+@media(max-width:600px){.vb-body{grid-template-columns:minmax(0,1fr)}.vb-side{grid-column:auto}.vb-stage{min-height:500px}.vb-trade-grid{grid-template-columns:1fr}#business-view .form-grid{grid-template-columns:1fr}}
+#business-view .node-actions,#business-view .photo-actions{position:sticky;bottom:0;background:#fff;border-top:1px solid var(--border);padding:12px 0;z-index:2;flex-wrap:wrap}
+
+/* Vue 视图使用 class（不是历史页面的 #home-view / #business-view）。主区占满可用高度，
+   列表与节点内容各自滚动，避免大屏底部留下无意义空白。 */
+.vb-stage-home,.vb-stage-business{flex:1;min-height:0;display:flex;flex-direction:column;gap:10px;overflow:hidden}
+.vb-stage-home>.vb-block:first-child{flex:0 0 auto}
+.vb-stage-home>.vb-history-block{flex:1 1 0;min-height:260px;display:flex;flex-direction:column}
+.vb-stage-home>.vb-history-block .vb-table-scroll{flex:1 1 0;min-height:0;overflow:auto}
+.vb-stage-home>.vb-history-block .vb-pager{flex-shrink:0}
+.vb-stage-business>.vb-node{flex:1 1 0;min-height:0;overflow:auto}
+
+/* 首页三栏的末块承接剩余高度，避免宽屏出现截断式卡片和大面积画布空白。 */
+.vb-agentbar>.vb-agent-stats{flex:1 1 0;min-height:0}
+.vb-side>.vb-side-group:not(.vb-business-side)>.vb-card:last-child{flex:1 1 0;min-height:0;display:flex;flex-direction:column}
+.vb-side>.vb-side-group:not(.vb-business-side)>.vb-card:last-child .vb-notice-list{flex:1 1 0;min-height:0;max-height:none;overflow:auto}
+
+.business-element-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 20px;margin:16px 0}.business-element-grid label{display:flex;align-items:center;gap:10px;font-size:13px}.business-element-grid label input{min-width:0;flex:1;height:38px;padding:8px;border:1px solid var(--border);border-radius:5px;background:#f8fafc}.business-element-grid img{max-width:220px;max-height:140px;object-fit:contain}.process-step{min-width:100px;flex:1 0 100px}.process-step span:last-child{white-space:normal;line-height:1.5;overflow-wrap:anywhere}.process-step button[data-restore-node]{display:flex;flex-direction:column;align-items:center;gap:5px;width:100%;min-height:58px;padding:0;color:inherit;font:inherit;background:transparent;border:0;cursor:pointer}.process-step button[data-restore-node]:focus-visible{outline:2px solid #2376d8;outline-offset:3px;border-radius:5px}.process-step.done button[data-restore-node]:hover .step-number{filter:brightness(.9);box-shadow:0 0 0 4px #d9ebff}#process-steps{overflow:auto;gap:10px}

@@ -1,0 +1,183 @@
+/* 首屏数字人是覆盖在 SDK 页面上的独立悬浮助手，不嵌入业务舞台。 */
+.vb-root .vb-stage-container { height:222px; min-height:222px; max-height:222px; background:radial-gradient(circle at 78% 23%,#82c9ff 0,#346bbf 24%,#112a60 64%,#0a1737 100%); }
+.vb-root .vb-stage-container::before { content:''; position:absolute; inset:0; background:linear-gradient(125deg,rgba(255,255,255,.13),transparent 32%),repeating-linear-gradient(90deg,transparent 0 42px,rgba(158,218,255,.09) 43px 44px); pointer-events:none; }
+.vb-root .vb-avatar-layer { position:absolute; top:62px; right:7px; left:auto; width:142px; height:196px; display:block; overflow:visible; background:transparent; pointer-events:none; z-index:30; }
+.vb-root .vb-digital-human-wrapper { position:absolute; right:0; bottom:0; width:142px; height:196px; overflow:visible; filter:drop-shadow(0 14px 13px rgba(2,13,48,.36)); }
+.vb-root .vb-digital-human-wrapper::before { content:''; position:absolute; z-index:-1; left:50%; bottom:1px; width:98px; height:15px; transform:translateX(-50%) perspective(90px) rotateX(63deg); border-radius:50%; background:radial-gradient(ellipse,rgba(111,222,255,.63),rgba(49,116,255,.18) 54%,transparent 73%); box-shadow:0 0 15px rgba(88,209,255,.48); }
+.vb-root .vb-digital-human-wrapper::after { content:''; position:absolute; z-index:1; inset:28px 15px 8px; border-radius:45% 45% 18px 18px; border:1px solid rgba(173,228,255,.18); background:linear-gradient(180deg,rgba(118,206,255,.08),transparent 48%); pointer-events:none; }
+.vb-root .vb-digital-human-img { position:absolute; inset:0; z-index:2; width:100%; height:100%; object-fit:contain; object-position:center bottom; clip-path:none; border:0; background:transparent; animation:vb-avatarFloat 5s ease-in-out infinite !important; }
+.vb-root .vb-digital-human-info { left:0; bottom:0; width:calc(100% - 194px); min-height:94px; padding:27px 15px 15px; background:linear-gradient(90deg,rgba(6,19,54,.88),rgba(11,35,83,.58),transparent); backdrop-filter:none; }
+.vb-root .vb-dh-title { font-size:19px!important; letter-spacing:.5px; }.vb-root .vb-dh-badge { font-size:10px; color:#d8f4ff; background:rgba(82,182,255,.16); border-color:rgba(143,221,255,.38); }
+.vb-root .vb-stage-badge { background:rgba(4,18,55,.5); border-color:rgba(197,239,255,.3); color:#e8f6ff; }.vb-root .vb-stage-dot { background:#6fe4ff; box-shadow:0 0 9px #6fe4ff; }
+@keyframes vb-avatarFloat { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-4px); } }
+@media (max-height:600px) { .vb-root .vb-stage-container { height:178px; min-height:178px; max-height:178px; }.vb-root .vb-avatar-layer { top:55px; right:5px; transform:scale(.78); transform-origin:right top; }.vb-root .vb-digital-human-info { min-height:77px; padding-top:19px; }.vb-root .vb-dh-title { font-size:16px!important; } }
+
+/* 客户操作节点统一使用真正的模态弹框：底层仍是原页面，居中窗口承载完整表单。 */
+.vb-root .vb-mobile-node-dialog { position:absolute; inset:0; z-index:90; display:flex; align-items:center; justify-content:center; padding:20px 16px; box-sizing:border-box; background:rgba(8,25,60,.36); backdrop-filter:none; }
+.vb-root .vb-mobile-node-sheet { display:flex; flex-direction:column; width:min(100%,420px); min-height:330px; max-height:min(76dvh,650px); overflow:hidden; border:1px solid rgba(214,226,244,.95); border-radius:16px; background:#fff; box-shadow:0 18px 48px rgba(3,18,52,.34); }
+.vb-root .vb-mobile-node-dialog-header { flex:0 0 auto; padding:16px 18px 14px; background:linear-gradient(180deg,#f8fbff,#f1f6ff); border-bottom:1px solid #dce7f4; }.vb-root .vb-mobile-node-dialog-header strong { color:#173d70; text-align:left; }
+.vb-root .vb-mobile-node-dialog .vb-mobile-node-panel { display:flex; flex:1 1 auto; min-height:245px; max-height:none; overflow:hidden; padding:0; border:0; background:#fff; }
+.vb-root .vb-mobile-node-dialog .vb-mobile-node-form { display:flex; flex:1 1 auto; min-height:0; flex-direction:column; width:100%; }
+.vb-root .vb-mobile-node-dialog .vb-node-form-body { flex:1 1 auto; min-height:0; overflow-y:auto; padding:20px 18px; }.vb-root .vb-mobile-node-dialog .vb-node-form-footer { flex:0 0 auto; padding:11px 18px calc(13px + env(safe-area-inset-bottom)); }
+.vb-root .vb-node-dialog-loading { min-height:180px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:9px; color:#58719b; text-align:center; }
+.vb-root .vb-node-dialog-loading h3 { margin:0; color:#183f73; font-size:17px; }.vb-root .vb-node-dialog-loading p { margin:0; font-size:13px; line-height:1.6; }
+.vb-root .vb-node-loading-dot { width:30px; height:30px; border:3px solid #d9e7fb; border-top-color:#2769c5; border-radius:50%; animation:vb-nodeLoading .8s linear infinite; }
+@keyframes vb-nodeLoading { to { transform:rotate(360deg); } }
+
+/* 渠道端是一张对话窗口；人物作为小型悬浮助手，不再占据单独的首屏背景区域。 */
+.vb-root .vb-phone { flex:1 1 0; min-height:0; box-sizing:border-box; background:#f5f8fc; border:1px solid #dce5ef; border-radius:16px; }
+.vb-root .vb-header { flex:0 0 auto; min-height:54px; padding:10px 16px; background:#fff; border-bottom:1px solid #e1e8f0; }
+.vb-root .vb-mobile-brand strong { font-size:15px; }.vb-root .vb-mobile-brand small { display:none; }
+.vb-root .vb-stage-container { display:none; height:0; min-height:0; max-height:none; background:#13202d; box-shadow:none; }
+.vb-root .vb-stage-container::before,.vb-root .vb-digital-human-info,.vb-root .vb-stage-badge { display:none; }
+.vb-root .vb-human-connected .vb-stage-container { display:none; height:0; min-height:0; }
+.vb-root .vb-widget-slot .vb-video-stage { pointer-events:auto; }
+.vb-root .vb-chat-zone { position:relative; display:flex; flex:1 1 auto; min-height:0; overflow:hidden; }
+.vb-root .vb-chat-history { flex:1 1 auto; min-height:0; width:100%; box-sizing:border-box; overflow-y:auto; padding:100px 16px 18px; background:transparent; }
+.vb-root .vb-human-connected .vb-chat-history { padding-top:18px; }
+.vb-root .vb-avatar-layer { position:absolute; top:8px; right:16px; bottom:auto; left:auto; width:70px; height:88px; background:none; z-index:25; pointer-events:none; transform:none; }
+.vb-root .vb-digital-human-wrapper { inset:0; width:100%; height:100%; filter:drop-shadow(0 4px 5px rgba(18,40,70,.15)); }
+.vb-root .vb-digital-human-wrapper::before,.vb-root .vb-digital-human-wrapper::after { display:none; }
+.vb-root .vb-digital-human-img { width:100%; height:100%; object-fit:contain; animation:none!important; }
+.vb-root .vb-msg { margin-bottom:12px; font-size:15px; line-height:1.65; border-radius:12px; }
+.vb-root .vb-quick-chips-bar { flex:0 0 auto; padding:8px 12px; gap:8px; background:transparent; }
+.vb-root .vb-chip-item { min-height:40px; padding:8px 12px; font-size:13px; }
+.vb-root .vb-controls { flex:0 0 auto; padding:12px 12px calc(12px + env(safe-area-inset-bottom)); gap:8px; background:#fff; border-top:1px solid #e1e8f0; }
+.vb-root .vb-controls input { min-width:0; font-size:16px; }.vb-root .vb-voice-btn,.vb-root .vb-btn-send { width:44px; height:44px; flex:0 0 44px; }
+.vb-root .vb-stepper-container { flex:0 0 auto; padding:8px 12px; min-height:0; }
+.vb-root .vb-stepper-header { padding:0 0 6px; font-size:12px; }.vb-root .vb-stepper-steps { padding:0; min-height:0; }
+.vb-root .vb-step .vb-circle { width:24px; height:24px; font-size:12px; }.vb-root .vb-step .vb-label { margin-top:4px; font-size:11px; line-height:16px; }
+@media (max-width:480px) { .vb-root .vb-phone { border:0; border-radius:0; }.vb-root .vb-header { padding-top:calc(10px + env(safe-area-inset-top)); } }
+@media (max-height:600px) { .vb-root .vb-mobile-node-dialog { padding:10px; align-items:center; }.vb-root .vb-mobile-node-sheet { width:100%; min-height:280px; max-height:calc(100dvh - 20px); border-radius:14px; } }
+
+.vb-root .vb-chat-home .vb-chat-history {
+    padding: 16px 14px 10px;
+    overscroll-behavior: contain;
+}
+.vb-root .vb-chat-home .vb-avatar-layer {
+    top: 14px;
+    right: 12px;
+    bottom: auto;
+    width: min(25%, 104px);
+    height: auto;
+    aspect-ratio: 1;
+    pointer-events: none;
+}
+.vb-root .vb-chat-home .vb-digital-human-wrapper::before {
+    display: block;
+    bottom: 2%;
+    width: 88%;
+    height: 26%;
+    background: radial-gradient(ellipse, #91b7e3 5%, #c5ddf7 50%, transparent 72%);
+    box-shadow: none;
+}
+.vb-root .vb-chat-home .vb-digital-human-img { object-position: center bottom; }
+.vb-root .vb-chat-home .vb-chat-opening {
+    max-width: 70%;
+    margin: 0 0 12px;
+    color: #263d60;
+    font-size: 14px;
+}
+.vb-root .vb-chat-home .vb-chat-opening .vb-welcome-text { font-size: inherit !important; }
+.vb-root .vb-chat-home .vb-chat-service-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 12px;
+    margin-top: 4px;
+}
+.vb-root .vb-chat-home .vb-chat-service-link,
+.vb-root .vb-chat-home .vb-chat-greeting {
+    min-height: 44px;
+    padding: 0;
+    color: #1d53a4;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+}
+.vb-root .vb-chat-home .vb-chat-service-link {
+    font-size: 14px;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+.vb-root .vb-chat-home .vb-chat-greeting {
+    display: inline-grid;
+    min-width: 44px;
+    place-items: center;
+    border-radius: 8px;
+}
+.vb-root .vb-chat-home .vb-chat-greeting:hover { background: #edf4ff; }
+.vb-root .vb-chat-home .vb-controls input::placeholder { color: #526783; font-size: 14px; }
+.vb-root .vb-chat-home.vb-human-connected .vb-avatar-layer,
+.vb-root .vb-chat-home.vb-human-connected .vb-chat-service-actions,
+.vb-root .vb-chat-home .vb-human-wait-panel:not([hidden]) ~ .vb-chat-zone .vb-chat-service-actions { display: none; }
+
+.vb-root .vb-camera-card {
+    display: block;
+    width: 100%;
+    min-height: 44px;
+    margin-top: 6px;
+    padding: 8px 10px;
+    border: 1px solid #cad8e9;
+    border-radius: 8px;
+    background: #f8fbff;
+    color: #193656;
+    font: inherit;
+}
+.vb-root .vb-camera-help, .vb-root .vb-camera-status {
+    color: #324b6a;
+    font-size: 14px;
+    line-height: 1.5;
+    margin: 8px 0;
+}
+.vb-root .vb-camera-preview {
+    position: relative;
+    width: min(100%, 48dvh);
+    margin-inline: auto;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    border-radius: 12px;
+    background: #18283d;
+}
+.vb-root .vb-camera-preview > video, .vb-root .vb-camera-preview > canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+.vb-root .vb-camera-face > video, .vb-root .vb-camera-face > canvas { transform: scaleX(-1); }
+.vb-root .vb-camera-guide {
+    position: absolute;
+    inset: 14% 10%;
+    border: 2px solid #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 0 200px #07142644;
+    pointer-events: none;
+}
+.vb-root .vb-camera-face .vb-camera-guide { inset: 9% 22%; border-radius: 50%; }
+.vb-root .vb-camera-guide.vb-camera-aligned { border-color: #5af0ba; }
+.vb-root .vb-camera-form [hidden] { display: none; }
+
+/* ---------------------------------------------------------------------------
+ * 只读要素回显（「栏位说明 + 只读框」）
+ *
+ * 每个要素一行：左侧栏位说明，右侧带边框、底色淡灰的只读值框。
+ * 框体是 <div> 而非 <input>：语义上就是回显，不是可编辑控件——用 disabled 输入框
+ * 会让人误以为"本来是能改的、只是被禁用了"。签字页的金额/收款人/账号/用途都是
+ * 客户在上一节点提交过的事实，此处只核对。
+ * 类名必须与 ui/receipt.js 输出一致（曾因漏加 vb- 前缀导致整块要素无样式）。
+ * ------------------------------------------------------------------------- */
+.vb-root .vb-mobile-receipt-row { display:flex; flex-direction:column; gap:6px; padding:12px 0; border-bottom:1px solid #e8eef7; }
+.vb-root .vb-mobile-receipt-row:last-child { border-bottom:0; }
+.vb-root .vb-mobile-receipt-row .vb-field-label { font-size:13px; font-weight:600; color:#5b7391; letter-spacing:.2px; }
+.vb-root .vb-mobile-receipt-row .vb-field-readonly { min-height:44px; display:flex; align-items:center; padding:11px 13px; background:#f4f7fc; border:1px solid #d8e3f2; border-radius:8px; font-size:16px; line-height:1.5; color:#143b6b; font-weight:500; overflow-wrap:anywhere; }
+.vb-root .vb-mobile-receipt-row .vb-field-empty { color:#93a5c0; font-size:13px; font-weight:400; }
+.vb-root .vb-mobile-receipt-row .vb-node-receipt-image { display:block; max-width:100%; max-height:180px; object-fit:contain; border-radius:6px; }
+.vb-root .vb-mobile-receipt-row .vb-document-link { color:#1d55bd; font-size:14px; text-decoration:underline; }
+
+/* 「重新签字」等次要动作按钮：此前只有 data-clear 的最小高度，没有任何外观，
+ * 在签字页里呈现为一个裸控件。给成与主按钮同族、但视觉更弱的次级样式。 */
+.vb-root .vb-signature-form .secondary-button { display:block; width:100%; min-height:44px; margin:0 0 4px; padding:11px 12px; background:#fff; color:#21518f; border:1px solid #c6d8ee; border-radius:8px; font-size:14px; font-weight:500; cursor:pointer; }
+.vb-root .vb-signature-form .secondary-button:active { background:#eef4fc; }
+.vb-root .vb-signature-form .secondary-button:disabled { opacity:.55; cursor:default; }

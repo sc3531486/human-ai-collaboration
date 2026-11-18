@@ -1,0 +1,1 @@
+export default {id:'authorization',tradeCode:'AUTHORIZATION',name:'统一授权',icon:'shield',description:'独立坐席复核授权',processDefinitionKey:'unified_authorization_sop',agent:{authorization_review:()=>import('./agent/AuthorizationReview.vue')},mobile:{},resultFields:['authorizationApproved'],chips:[]};

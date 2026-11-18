@@ -1,0 +1,50 @@
+[
+  {
+    "tradeCode": "300101",
+    "tradeName": "转账汇款",
+    "bizType": "TRANSFER",
+    "description": "转账信息采集与视频核验",
+    "icon": "transfer",
+    "processDefinitionKey": "advanced_sop",
+    "skills": [
+      "GENERAL",
+      "VIP",
+      "PRIVATE_BANKING"
+    ]
+  },
+  {
+    "tradeCode": "200102",
+    "tradeName": "账户查询",
+    "bizType": "BALANCE",
+    "description": "身份核验、余额查询与结果告知",
+    "icon": "wallet",
+    "processDefinitionKey": "balance_sop",
+    "skills": [
+      "GENERAL",
+      "VIP",
+      "PRIVATE_BANKING"
+    ]
+  },
+  {
+    "tradeCode": "200101",
+    "tradeName": "密码重置",
+    "bizType": "PASSWORD_RESET",
+    "description": "证件核验、独立授权、短信验证与签字确认",
+    "icon": "lock",
+    "processDefinitionKey": "password_reset_sop",
+    "skills": [
+      "GENERAL"
+    ]
+  },
+  {
+    "tradeCode": "00",
+    "tradeName": "内部交易",
+    "bizType": "INTERNAL",
+    "description": "尚未配置办理流程",
+    "icon": "bank",
+    "processDefinitionKey": "",
+    "skills": [
+      "GENERAL"
+    ]
+  }
+]
